@@ -1,0 +1,10 @@
+{
+  "name": "fusion2lottie-fidelity",
+  "private": true,
+  "type": "module",
+  "description": "Renders Lottie files with lottie-web in headless Chrome, for comparing with Resolve's frames.",
+  "dependencies": {
+    "lottie-web": "^5.13.0",
+    "puppeteer-core": "^25.14.0"
+  }
+}

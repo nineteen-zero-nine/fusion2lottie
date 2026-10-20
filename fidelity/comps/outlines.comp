@@ -1,0 +1,18 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 20 },
+	GlobalRange = { 0, 20 },
+	Tools = {
+		Frame = sRectangle { Inputs = { ["Translate.X"] = Input { Value = -0.25 }, ["Translate.Y"] = Input { Value = 0.2 }, ["Width"] = Input { Value = 0.3 }, ["Height"] = Input { Value = 0.2 }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.02 }, ["Red"] = Input { Value = 0.9 }, ["Green"] = Input { Value = 0.35 }, ["Blue"] = Input { Value = 0.2 }, } },
+		Ring = sEllipse { Inputs = { ["Translate.X"] = Input { Value = 0.2 }, ["Translate.Y"] = Input { Value = 0.2 }, ["Width"] = Input { Value = 0.25 }, ["Height"] = Input { Value = 0.25 }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.01 }, ["Red"] = Input { Value = 0.2 }, ["Green"] = Input { Value = 0.75 }, ["Blue"] = Input { Value = 0.7 }, } },
+		Bevel = sPolygon { Inputs = { ["Center"] = Input { Value = { -0.25, -0.15 } }, ["Polyline"] = Input { Value = Polyline { Closed = false, Points = { { Linear = true, X = -0.15, Y = -0.05 }, { Linear = true, X = 0, Y = 0.08 }, { Linear = true, X = 0.15, Y = -0.05 } } } }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.025 }, ["JoinStyle"] = Input { Value = 0 }, ["CapStyle"] = Input { Value = 0 }, ["Red"] = Input { Value = 0.93 }, ["Green"] = Input { Value = 0.9 }, ["Blue"] = Input { Value = 0.85 }, } },
+		Round = sPolygon { Inputs = { ["Center"] = Input { Value = { 0.2, -0.15 } }, ["Polyline"] = Input { Value = Polyline { Closed = false, Points = { { Linear = true, X = -0.15, Y = -0.05 }, { Linear = true, X = 0, Y = 0.08 }, { Linear = true, X = 0.15, Y = -0.05 } } } }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.025 }, ["JoinStyle"] = Input { Value = 2 }, ["CapStyle"] = Input { Value = 2 }, ["Red"] = Input { Value = 0.93 }, ["Green"] = Input { Value = 0.9 }, ["Blue"] = Input { Value = 0.85 }, } },
+		Thick = sPolygon { Inputs = { ["Center"] = Input { Value = { 0, -0.32 } }, ["Polyline"] = Input { Value = Polyline { Closed = false, Points = { { Linear = true, X = -0.15, Y = -0.05 }, { Linear = true, X = 0, Y = 0.08 }, { Linear = true, X = 0.15, Y = -0.05 } } } }, ["Solid"] = Input { Value = 0 }, ["JoinStyle"] = Input { Value = 1 }, ["CapStyle"] = Input { Value = 1 }, ["Red"] = Input { Value = 0.9 }, ["Green"] = Input { Value = 0.35 }, ["Blue"] = Input { Value = 0.2 }, ["BorderWidth"] = Input { SourceOp = "ThickBorderWidth", Source = "Value" }, } },
+		ThickBorderWidth = BezierSpline { KeyFrames = { [0] = { 0.005, RH = { 6.6667, 0.005 } }, [20] = { 0.04, LH = { 13.3333, 0.04 } }, } },
+		All = sMerge { Inputs = { ["Input1"] = Input { SourceOp = "Frame", Source = "Output" }, ["Input2"] = Input { SourceOp = "Ring", Source = "Output" }, ["Input3"] = Input { SourceOp = "Bevel", Source = "Output" }, ["Input4"] = Input { SourceOp = "Round", Source = "Output" }, ["Input5"] = Input { SourceOp = "Thick", Source = "Output" }, } },
+		Render = sRender { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["Input"] = Input { SourceOp = "All", Source = "Output" }, } },
+		Back = Background { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["TopLeftRed"] = Input { Value = 0.08 }, ["TopLeftGreen"] = Input { Value = 0.08 }, ["TopLeftBlue"] = Input { Value = 0.1 }, } },
+		Over = Merge { Inputs = { ["Background"] = Input { SourceOp = "Back", Source = "Output" }, ["Foreground"] = Input { SourceOp = "Render", Source = "Output" }, } },
+		MediaOut1 = Saver { Inputs = { ["Index"] = Input { Value = "0" }, ["Input"] = Input { SourceOp = "Over", Source = "Output" }, } },
+	},
+}

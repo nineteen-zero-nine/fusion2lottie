@@ -93,3 +93,39 @@ def test_a_transformed_merge_is_refused():
     text = comp_with('Render = sRender { },').replace(
         'Foreground = Input', 'Size = Input { Value = 0.5 }, Foreground = Input')
     assert check(parse(text)) == ["Out.Size: scaling a Merge is not supported"]
+
+
+@pytest.fixture(scope="module")
+def primitives():
+    return {name: convert(parse((FIXTURES / f"{name}.comp").read_text()), fps=30)[0]
+            for name in ("rectangles", "ellipses", "stars", "outlines", "write-on")}
+
+
+def path_of(lottie, name):
+    return next(item for item in find(lottie, name)["it"] if item["ty"] == "sh")["ks"]
+
+
+def test_a_size_animated_by_one_input_stays_keyframed(primitives):
+    assert len(path_of(primitives["rectangles"], "Growing")["k"]) == 2  # Width eases from 0.05 to 0.6
+    assert len(path_of(primitives["ellipses"], "Breathing")["k"]) == 3
+    assert len(path_of(primitives["stars"], "Pulsing")["k"]) == 2  # Depth
+
+
+def test_rotation_and_position_go_to_the_group_not_the_path(primitives):
+    growing = transform_of(find(primitives["rectangles"], "Growing"))
+    assert growing["r"]["a"] == 1 and growing["p"]["k"] == pytest.approx([256, 256 + 0.2 * 512])
+
+
+def test_outlines_keep_fusions_joins_caps_and_width(primitives):
+    def outline(name):
+        return next(item for item in find(primitives["outlines"], name)["it"] if item["ty"] == "st")
+
+    assert (outline("Bevel")["lj"], outline("Bevel")["lc"]) == (3, 1)  # bevel join, butt cap
+    assert (outline("Round")["lj"], outline("Round")["lc"]) == (1, 3)  # miter join, square cap
+    assert (outline("Thick")["lj"], outline("Thick")["lc"]) == (2, 2)  # round join, round cap
+    assert outline("Frame")["w"]["k"] == pytest.approx(0.02 * 512)
+
+
+def test_write_on_becomes_a_trim(primitives):
+    trim = next(item for item in find(primitives["write-on"], "Sliding")["it"] if item["ty"] == "tm")
+    assert trim["o"]["a"] == 1 and trim["e"]["k"] == pytest.approx(0.3 * (100 - 0.01) + 0.01)

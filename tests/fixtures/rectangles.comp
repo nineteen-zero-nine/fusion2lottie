@@ -1,0 +1,162 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 149 },
+	GlobalRange = { 0, 149 },
+	CurrentID = 11,
+	PlaybackUpdateMode = 0,
+	StereoMode = false,
+	Version = "DaVinci Resolve Studio 21.1.1.0010",
+	SavedOutputs = 0,
+	HeldTools = 0,
+	DisabledTools = 0,
+	LockedTools = 0,
+	AudioOffset = 0,
+	Resumable = true,
+	OutputClips = {
+	},
+	Tools = {
+		Render = sRender {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 512, },
+				Height = Input { Value = 512, },
+				Input = Input {
+					SourceOp = "All",
+					Source = "Output",
+				}
+			},
+		},
+		MediaOut1 = Saver {
+			Inputs = {
+				Index = Input { Value = "0", },
+				Input = Input {
+					SourceOp = "Over",
+					Source = "Output",
+				}
+			},
+		},
+		GrowingAngle = BezierSpline {
+			SplineColor = { Red = 14, Green = 221, Blue = 144 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[0] = { 0, RH = { 6.6667, 0 } },
+				[20] = { 45, LH = { 13.3333, 45 } }
+			}
+		},
+		Over = Merge {
+			Inputs = {
+				Background = Input {
+					SourceOp = "Back",
+					Source = "Output",
+				},
+				Foreground = Input {
+					SourceOp = "Render",
+					Source = "Output",
+				}
+			},
+		},
+		Back = Background {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 512, },
+				Height = Input { Value = 512, },
+				TopLeftRed = Input { Value = 0.08, },
+				TopLeftGreen = Input { Value = 0.08, },
+				TopLeftBlue = Input { Value = 0.1, }
+			},
+		},
+		Growing = sRectangle {
+			Inputs = {
+				["Translate.Y"] = Input { Value = -0.2, },
+				Width = Input {
+					SourceOp = "GrowingWidth",
+					Source = "Value",
+				},
+				Height = Input { Value = 0.1, },
+				Angle = Input {
+					SourceOp = "GrowingAngle",
+					Source = "Value",
+				},
+				Red = Input { Value = 0.93, },
+				Green = Input { Value = 0.9, },
+				Blue = Input { Value = 0.85, }
+			},
+			Version = 1
+		},
+		Rounded = sRectangle {
+			Inputs = {
+				["Translate.X"] = Input { Value = 0.2, },
+				["Translate.Y"] = Input { Value = 0.2, },
+				Width = Input { Value = 0.3, },
+				Height = Input { Value = 0.2, },
+				CornerRadius = Input { Value = 0.4, },
+				Angle = Input { Value = 20, },
+				Red = Input { Value = 0.2, },
+				Green = Input { Value = 0.75, },
+				Blue = Input { Value = 0.7, }
+			},
+			Version = 1
+		},
+		GrowingWidth = BezierSpline {
+			SplineColor = { Red = 225, Green = 255, Blue = 0 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[0] = { 0.05, RH = { 6.6667, 0.05 } },
+				[20] = { 0.6, LH = { 13.3333, 0.6 } }
+			}
+		},
+		Plain = sRectangle {
+			Inputs = {
+				["Translate.X"] = Input { Value = -0.25, },
+				["Translate.Y"] = Input { Value = 0.2, },
+				Width = Input { Value = 0.3, },
+				Height = Input { Value = 0.15, },
+				Red = Input { Value = 0.9, },
+				Green = Input { Value = 0.35, },
+				Blue = Input { Value = 0.2, }
+			},
+			Version = 1
+		},
+		All = sMerge {
+			Inputs = {
+				Input1 = Input {
+					SourceOp = "Plain",
+					Source = "Output",
+				},
+				Input2 = Input {
+					SourceOp = "Rounded",
+					Source = "Output",
+				},
+				Input3 = Input {
+					SourceOp = "Growing",
+					Source = "Output",
+				}
+			},
+		}
+	},
+	Frames = {
+	},
+	Prefs = {
+		Comp = {
+			Interactive = {
+				Proxy = {
+					Scale = 1,
+				},
+			},
+			Paths = {
+				Map = {
+				},
+			},
+			FrameFormat = {
+				Width = 512,
+				Height = 512,
+				DepthFull = 3,
+				DepthPreview = 3,
+				DepthInteractive = 3,
+			},
+			Unsorted = {
+				GlobalEnd = 149
+			},
+		}
+	},
+}

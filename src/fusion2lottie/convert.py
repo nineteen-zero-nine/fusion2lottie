@@ -15,9 +15,34 @@ from __future__ import annotations
 
 import re
 
+from . import shapes
 from .comp import Table
 
 LOTTIE_VERSION = "5.12.0"
+
+# The primitives: their geometry, the inputs that shape it (argument: (input, Fusion's default)), and the whole
+# numbers among them, which cannot animate.
+PRIMITIVES = {
+    "sRectangle": (shapes.rectangle, {"width": ("Width", 0.5), "height": ("Height", 0.5),
+                                      "corner_radius": ("CornerRadius", 0.0)}, {}),
+    "sEllipse": (shapes.ellipse, {"width": ("Width", 0.5), "height": ("Height", 0.5)}, {}),
+    "sNGon": (shapes.polygon, {"width": ("Width", 0.5), "height": ("Height", 0.5)}, {"sides": ("Sides", 6)}),
+    "sStar": (shapes.star, {"width": ("Width", 0.5), "height": ("Height", 0.5), "depth": ("Depth", 0.5)},
+              {"points": ("Points", 6)}),
+}
+# Fusion's JoinStyle and CapStyle to Lottie's lj (1 miter, 2 round, 3 bevel) and lc (1 butt, 2 round, 3 square).
+JOINS = {0: 3, 1: 2, 2: 1}
+CAPS = {0: 1, 1: 2, 2: 3}
+
+
+def bezier_ease(x1, y1, x2, y2, x):
+    """Lottie's easing: the cubic Bezier from (0, 0) to (1, 1) with these handles, solved for x."""
+    lo, hi = 0.0, 1.0
+    for _ in range(60):
+        s = (lo + hi) / 2
+        lo, hi = (s, hi) if 3 * (1 - s) ** 2 * s * x1 + 3 * (1 - s) * s * s * x2 + s ** 3 < x else (lo, s)
+    s = (lo + hi) / 2
+    return 3 * (1 - s) ** 2 * s * y1 + 3 * (1 - s) * s * s * y2 + s ** 3
 
 
 class ConversionError(Exception):
@@ -217,6 +242,8 @@ class _Converter:
             kind = self.tools[tool].kind
             if kind == "sPolygon":
                 return self.polygon(tool)
+            if kind in PRIMITIVES:
+                return self.primitive(tool, kind)
             if kind == "sMerge":
                 return self.smerge(tool)
             if kind == "sTransform":
@@ -226,24 +253,98 @@ class _Converter:
             self.problems.append(str(e))
             return None
 
-    def fill(self, tool):
+    def color(self, tool):
         color = [self.number(tool, c, 1.0) for c in ("Red", "Green", "Blue")]
         if any(c[0] == "keys" for c in color):
-            c = self.prop(color + [("static", 1.0)], [lambda x: x] * 4)
+            return self.prop(color + [("static", 1.0)], [lambda x: x] * 4)
+        return {"a": 0, "k": [ch[1] for ch in color] + [1]}
+
+    def paint(self, tool):
+        """What draws the path: a fill, or an outline (Solid off), after a trim when only part is written on."""
+        items = []
+        position, length = self.number(tool, "WritePosition", 0.0), self.number(tool, "WriteLength", 1.0)
+        if position != ("static", 0.0) or length != ("static", 1.0):
+            solid = self.static(tool, "Solid", 1) in (1, 1.0)
+            # Fusion still draws the caps of an outline written on to nothing (a dot); Lottie draws nothing at zero
+            # length, so keep a sliver. Scaling rather than clamping keeps the keyframes' easing exact.
+            sliver = 0.0 if solid or int(self.static(tool, "CapStyle", 1)) == 0 else 0.01
+            items.append({"ty": "tm", "nm": f"{tool} write on", "m": 1, "s": {"a": 0, "k": 0},
+                          "e": self.prop([length], [lambda x: sliver + x * (100 - sliver)]),
+                          "o": self.prop([position], [lambda x: x * 360])})
+        alpha = self.prop([self.number(tool, "Alpha", 1.0)], [lambda x: x * 100])
+        if self.static(tool, "Solid", 1) in (1, 1.0):
+            self.require(tool, "BorderWidth", 0, "a border on a solid shape")
+            items.append({"ty": "fl", "nm": f"{tool} fill", "c": self.color(tool), "o": alpha,
+                          "r": 1 if self.static(tool, "FillMethod", 0) in (0, 0.0) else 2})
         else:
-            c = {"a": 0, "k": [ch[1] for ch in color] + [1]}
-        return {"ty": "fl", "nm": f"{tool} fill", "c": c,
-                "o": self.prop([self.number(tool, "Alpha", 1.0)], [lambda x: x * 100]),
-                "r": 1 if self.static(tool, "FillMethod", 0) in (0, 0.0) else 2}
+            join, cap = int(self.static(tool, "JoinStyle", 1)), int(self.static(tool, "CapStyle", 1))
+            items.append({"ty": "st", "nm": f"{tool} outline", "c": self.color(tool), "o": alpha,
+                          "w": self.prop([self.number(tool, "BorderWidth", 0.0)], [lambda x: x * self.w]),
+                          "lj": JOINS[join], "lc": CAPS[cap], "ml": float(self.static(tool, "MiterLimit", 10))})
+        return items
+
+    def to_path(self, geometry, closed=True):
+        v, i, o = geometry
+        return {"c": closed, "v": [[x * self.w, -y * self.w] for x, y in v],
+                "i": [[x * self.w, -y * self.w] for x, y in i], "o": [[x * self.w, -y * self.w] for x, y in o]}
+
+    def path_prop(self, channels, geometry):
+        """A path whose shape follows animated inputs: keyframed when one easing curve moves every vertex exactly as
+        Fusion does, otherwise sampled once per frame."""
+        animated = {n: c for n, c in channels.items() if c[0] == "keys"}
+        values = {n: c[1] for n, c in channels.items()}
+        if not animated:
+            return {"a": 0, "k": self.to_path(geometry(**values))}
+
+        def at(t):
+            return geometry(**{n: self.value_at(c, t) for n, c in channels.items()})
+
+        times = {tuple(k["t"] for k in c[1]) for c in animated.values()}
+        if len(times) == 1:
+            times = list(times.pop())
+            eases = [{self.ease(c, s) for c in animated.values()} for s in range(len(times) - 1)]
+            if all(len(e) == 1 and None not in e for e in eases):
+                eases = [e.pop() for e in eases]
+                if self.follows(at, times, eases):
+                    return {"a": 1, "k": [dict({"t": t - self.start, "s": [self.to_path(at(t))]},
+                                               **({"o": {"x": eases[n][0], "y": eases[n][1]},
+                                                   "i": {"x": eases[n][2], "y": eases[n][3]}}
+                                                  if n < len(eases) else {}))
+                                          for n, t in enumerate(times)]}
+        self.notes.append("a path sampled once per frame")
+        return {"a": 1, "k": [{"t": f - self.start, "s": [self.to_path(at(f))], "o": {"x": 0, "y": 0},
+                               "i": {"x": 1, "y": 1}} for f in range(self.start, self.end + 1)]}
+
+    def follows(self, at, times, eases):
+        """Whether blending each segment's end shapes by its easing reproduces the geometry at every frame."""
+        for n in range(len(times) - 1):
+            a, b = at(times[n]), at(times[n + 1])
+            for f in range(int(times[n]) + 1, int(times[n + 1])):
+                y = bezier_ease(*eases[n], (f - times[n]) / (times[n + 1] - times[n]))
+                truth = at(f)
+                for part in range(3):
+                    for pa, pb, pt in zip(a[part], b[part], truth[part]):
+                        if any(abs(pa[d] + (pb[d] - pa[d]) * y - pt[d]) > 1e-6 for d in (0, 1)):
+                            return False
+        return True
+
+    def primitive(self, tool, kind):
+        self.require(tool, "Translate.Z", 0, "Z translation")
+        geometry, numbers, counts = PRIMITIVES[kind]
+        channels = {arg: self.number(tool, name, default) for arg, (name, default) in numbers.items()}
+        for arg, (name, default) in counts.items():
+            channels[arg] = ("static", int(self.static(tool, name, default)))
+        path = {"ty": "sh", "nm": f"{tool} path", "ks": self.path_prop(channels, geometry)}
+        tr = self.transform(tool, pos=[self.number(tool, "Translate.X", 0.0), self.number(tool, "Translate.Y", 0.0)],
+                            scale=[("static", 1.0)] * 2, rot=self.number(tool, "Angle", 0.0),
+                            opacity=self.number(tool, "Opacity", 1.0))
+        tr["a"] = {"a": 0, "k": [0, 0]}
+        return {"ty": "gr", "nm": tool, "it": [path, *self.paint(tool), tr]}
 
     def polygon(self, tool):
         for name, default, what in (("XRotation", 0, "rotation about X"), ("YRotation", 0, "rotation about Y"),
                                     ("Translate.Z", 0, "Z translation")):
             self.require(tool, name, default, what)
-        if self.static(tool, "Solid", 1) not in (1, 1.0):
-            raise Unsupported(f"{tool}: outlines (Solid off) are not supported yet")
-        for name, default in (("WritePosition", 0), ("WriteLength", 1)):
-            self.require(tool, name, default, "partial drawing (write on)")
         pl = self.static(tool, "Polyline", None)
         if pl is None:
             raise Unsupported(f"{tool}: has no polyline")
@@ -262,7 +363,7 @@ class _Converter:
         tr = self.transform(tool, pos=self.point(tool, "Center", [0, 0]), scale=[size, size],
                             rot=self.number(tool, "ZRotation", 0.0), opacity=self.number(tool, "Opacity", 1.0))
         tr["a"] = {"a": 0, "k": [0, 0]}  # the polyline is drawn around Center
-        return {"ty": "gr", "nm": tool, "it": [path, self.fill(tool), tr]}
+        return {"ty": "gr", "nm": tool, "it": [path, *self.paint(tool), tr]}
 
     def smerge(self, tool):
         inputs = self.tools[tool].get("Inputs", {})

@@ -1,0 +1,147 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 149 },
+	GlobalRange = { 0, 149 },
+	CurrentID = 10,
+	PlaybackUpdateMode = 0,
+	StereoMode = false,
+	Version = "DaVinci Resolve Studio 21.1.1.0010",
+	SavedOutputs = 0,
+	HeldTools = 0,
+	DisabledTools = 0,
+	LockedTools = 0,
+	AudioOffset = 0,
+	Resumable = true,
+	OutputClips = {
+	},
+	Tools = {
+		Circle = sEllipse {
+			Inputs = {
+				["Translate.X"] = Input { Value = -0.25, },
+				["Translate.Y"] = Input { Value = 0.2, },
+				Width = Input { Value = 0.2, },
+				Height = Input { Value = 0.2, },
+				Red = Input { Value = 0.9, },
+				Green = Input { Value = 0.35, },
+				Blue = Input { Value = 0.2, }
+			},
+		},
+		MediaOut1 = Saver {
+			Inputs = {
+				Index = Input { Value = "0", },
+				Input = Input {
+					SourceOp = "Over",
+					Source = "Output",
+				}
+			},
+		},
+		BreathingHeight = BezierSpline {
+			SplineColor = { Red = 0, Green = 255, Blue = 255 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[0] = { 0.02, RH = { 3.3333, 0.02 } },
+				[10] = { 0.25, LH = { 6.6667, 0.25 }, RH = { 13.3333, 0.25 } },
+				[20] = { 0.1, LH = { 16.6667, 0.1 } }
+			}
+		},
+		Over = Merge {
+			Inputs = {
+				Background = Input {
+					SourceOp = "Back",
+					Source = "Output",
+				},
+				Foreground = Input {
+					SourceOp = "Render",
+					Source = "Output",
+				}
+			},
+		},
+		Breathing = sEllipse {
+			Inputs = {
+				["Translate.Y"] = Input { Value = -0.2, },
+				Width = Input { Value = 0.3, },
+				Height = Input {
+					SourceOp = "BreathingHeight",
+					Source = "Value",
+				},
+				Red = Input { Value = 0.93, },
+				Green = Input { Value = 0.9, },
+				Blue = Input { Value = 0.85, }
+			},
+		},
+		Back = Background {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 512, },
+				Height = Input { Value = 512, },
+				TopLeftRed = Input { Value = 0.08, },
+				TopLeftGreen = Input { Value = 0.08, },
+				TopLeftBlue = Input { Value = 0.1, }
+			},
+		},
+		Oval = sEllipse {
+			Inputs = {
+				["Translate.X"] = Input { Value = 0.2, },
+				["Translate.Y"] = Input { Value = 0.15, },
+				Width = Input { Value = 0.35, },
+				Height = Input { Value = 0.15, },
+				Angle = Input { Value = 30, },
+				Red = Input { Value = 0.2, },
+				Green = Input { Value = 0.75, },
+				Blue = Input { Value = 0.7, }
+			},
+		},
+		Render = sRender {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 512, },
+				Height = Input { Value = 512, },
+				Input = Input {
+					SourceOp = "All",
+					Source = "Output",
+				}
+			},
+		},
+		All = sMerge {
+			Inputs = {
+				Input1 = Input {
+					SourceOp = "Circle",
+					Source = "Output",
+				},
+				Input2 = Input {
+					SourceOp = "Oval",
+					Source = "Output",
+				},
+				Input3 = Input {
+					SourceOp = "Breathing",
+					Source = "Output",
+				}
+			},
+		}
+	},
+	Frames = {
+	},
+	Prefs = {
+		Comp = {
+			Interactive = {
+				Proxy = {
+					Scale = 1,
+				},
+			},
+			Paths = {
+				Map = {
+				},
+			},
+			FrameFormat = {
+				Width = 512,
+				Height = 512,
+				DepthFull = 3,
+				DepthPreview = 3,
+				DepthInteractive = 3,
+			},
+			Unsorted = {
+				GlobalEnd = 149
+			},
+		}
+	},
+}

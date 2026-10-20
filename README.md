@@ -43,7 +43,11 @@ lottie, notes = convert(parse(open("intro.comp").read()), fps=30)
 
 | Fusion | Lottie |
 |---|---|
-| `sPolygon`: polyline (straight or curved), colour, `Center`, `Size`, `ZRotation`, `Opacity`, `Alpha` | shape group: path, fill, transform |
+| `sPolygon`: polyline (straight or curved, open or closed), `Center`, `Size`, `ZRotation` | shape group: path and transform |
+| `sRectangle` (with `CornerRadius`), `sEllipse`, `sNGon`, `sStar`: `Width`, `Height`, `Depth`, `Translate`, `Angle` | path drawn where Fusion draws it, keyframed as it resizes |
+| colour, `Alpha`, `Opacity` | fill or stroke colour and opacity, group opacity |
+| outlines (`Solid` off): `BorderWidth`, `JoinStyle`, `CapStyle`, `MiterLimit` | stroke with the same width, joins and caps |
+| write-on: `WritePosition`, `WriteLength` | trim path, starting and running where Fusion's does |
 | `sMerge` | group (Fusion's highest input drawn on top) |
 | `sTransform`: offset, size (including mirroring with a negative size), rotation, pivot | group transform |
 | `sRender` | shape layer |
@@ -51,21 +55,24 @@ lottie, notes = convert(parse(open("intro.comp").read()), fps=30)
 | `Merge` (untransformed, Normal) | layer order |
 | `BezierSpline` keyframes | keyframes with the same easing, converted exactly |
 
-One tool's output feeding several tools is fine: Lottie has no instancing, so the shared part is written once per use.
+One tool's output feeding several tools is fine: Lottie has no instancing, so the shared part is written once per use. A shape animated in a way one easing curve cannot reproduce exactly, such as width and height on different keyframes, is sampled once per frame instead, and the conversion says so.
 
-**Not yet:** `sRectangle`, `sEllipse`, `sNGon`, `sStar`, outlines (`Solid` off), write-on (`WritePosition`/`WriteLength`), animated polylines and points, `Text+`, transformed or blended `Merge`s, expressions and modifiers other than keyframes.
+**Not yet:** animated polylines and points, `Sides` and `Points` changing over time, `Text+`, transformed or blended `Merge`s, the other shape tools (`sBoolean`, `sDuplicate`, `sGrid`, `sOutline`, `sExpand`, `sJitter`), expressions and modifiers other than keyframes.
 
 **Never:** blur, glow, particles, 3D and other pixel effects. Lottie is vector, so render those as video with alpha instead.
 
 ## How it is checked
 
-Every converted animation is compared with Resolve's own render, frame by frame. The first one, the Valhalla logo intro (90 frames, 1024×1024), differs from Resolve's render in 0.05% of pixels on average and 0.09% on the worst frame, all of it one-pixel anti-aliasing. The tests also check keyframes against the values Fusion itself reports.
+Conversions are compared with Resolve's own render, frame by frame. `fidelity/` holds small compositions that each exercise one family of tools, and a script that renders them in Resolve and keeps the comp and frames Resolve produces as test fixtures. The test suite converts each fixture, plays it with `lottie-web` in headless Chrome, and requires every frame to match Resolve's within one-pixel anti-aliasing: under 3% of the drawn area, and in practice 0.3–1.4%. The tests also check keyframes against the values Fusion itself reports.
 
 ## Develop
 
 ```sh
+(cd fidelity && npm install)   # lottie-web for the fidelity tests; also needs Google Chrome (or set CHROME)
 uv run pytest
 ```
+
+To add a fidelity case: describe it in `fidelity/make_comps.py`, run `uv run fidelity/make_comps.py`, then render it with Resolve Studio open (`python3 fidelity/render_in_resolve.py <name>`).
 
 ## License
 

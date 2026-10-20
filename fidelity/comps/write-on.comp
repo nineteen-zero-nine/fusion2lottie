@@ -1,0 +1,18 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 20 },
+	GlobalRange = { 0, 20 },
+	Tools = {
+		Drawing = sEllipse { Inputs = { ["Translate.X"] = Input { Value = -0.2 }, ["Translate.Y"] = Input { Value = 0.15 }, ["Width"] = Input { Value = 0.3 }, ["Height"] = Input { Value = 0.3 }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.02 }, ["Red"] = Input { Value = 0.9 }, ["Green"] = Input { Value = 0.35 }, ["Blue"] = Input { Value = 0.2 }, ["WriteLength"] = Input { SourceOp = "DrawingWriteLength", Source = "Value" }, } },
+		DrawingWriteLength = BezierSpline { KeyFrames = { [0] = { 0, RH = { 6.6667, 0 } }, [20] = { 1, LH = { 13.3333, 1 } }, } },
+		Sliding = sRectangle { Inputs = { ["Translate.X"] = Input { Value = 0.2 }, ["Translate.Y"] = Input { Value = 0.15 }, ["Width"] = Input { Value = 0.3 }, ["Height"] = Input { Value = 0.3 }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.02 }, ["WriteLength"] = Input { Value = 0.3 }, ["Red"] = Input { Value = 0.2 }, ["Green"] = Input { Value = 0.75 }, ["Blue"] = Input { Value = 0.7 }, ["WritePosition"] = Input { SourceOp = "SlidingWritePosition", Source = "Value" }, } },
+		SlidingWritePosition = BezierSpline { KeyFrames = { [0] = { 0, RH = { 6.6667, 0 } }, [20] = { 1, LH = { 13.3333, 1 } }, } },
+		Line = sPolygon { Inputs = { ["Center"] = Input { Value = { 0, -0.2 } }, ["Polyline"] = Input { Value = Polyline { Closed = false, Points = { { Linear = true, X = -0.15, Y = -0.05 }, { Linear = true, X = 0, Y = 0.08 }, { Linear = true, X = 0.15, Y = -0.05 } } } }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.02 }, ["Red"] = Input { Value = 0.93 }, ["Green"] = Input { Value = 0.9 }, ["Blue"] = Input { Value = 0.85 }, ["WriteLength"] = Input { SourceOp = "LineWriteLength", Source = "Value" }, } },
+		LineWriteLength = BezierSpline { KeyFrames = { [0] = { 0, RH = { 6.6667, 0 } }, [20] = { 1, LH = { 13.3333, 1 } }, } },
+		All = sMerge { Inputs = { ["Input1"] = Input { SourceOp = "Drawing", Source = "Output" }, ["Input2"] = Input { SourceOp = "Sliding", Source = "Output" }, ["Input3"] = Input { SourceOp = "Line", Source = "Output" }, } },
+		Render = sRender { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["Input"] = Input { SourceOp = "All", Source = "Output" }, } },
+		Back = Background { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["TopLeftRed"] = Input { Value = 0.08 }, ["TopLeftGreen"] = Input { Value = 0.08 }, ["TopLeftBlue"] = Input { Value = 0.1 }, } },
+		Over = Merge { Inputs = { ["Background"] = Input { SourceOp = "Back", Source = "Output" }, ["Foreground"] = Input { SourceOp = "Render", Source = "Output" }, } },
+		MediaOut1 = Saver { Inputs = { ["Index"] = Input { Value = "0" }, ["Input"] = Input { SourceOp = "Over", Source = "Output" }, } },
+	},
+}

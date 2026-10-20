@@ -1,0 +1,16 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 20 },
+	GlobalRange = { 0, 20 },
+	Tools = {
+		Pentagon = sNGon { Inputs = { ["Translate.X"] = Input { Value = -0.25 }, ["Translate.Y"] = Input { Value = 0.2 }, ["Sides"] = Input { Value = 5 }, ["Width"] = Input { Value = 0.25 }, ["Height"] = Input { Value = 0.25 }, ["Red"] = Input { Value = 0.9 }, ["Green"] = Input { Value = 0.35 }, ["Blue"] = Input { Value = 0.2 }, } },
+		Hexagon = sNGon { Inputs = { ["Translate.X"] = Input { Value = 0.2 }, ["Translate.Y"] = Input { Value = 0.2 }, ["Width"] = Input { Value = 0.35 }, ["Height"] = Input { Value = 0.2 }, ["Angle"] = Input { Value = 15 }, ["Red"] = Input { Value = 0.2 }, ["Green"] = Input { Value = 0.75 }, ["Blue"] = Input { Value = 0.7 }, } },
+		Turning = sNGon { Inputs = { ["Translate.X"] = Input { Value = 0 }, ["Translate.Y"] = Input { Value = -0.2 }, ["Sides"] = Input { Value = 3 }, ["Width"] = Input { Value = 0.25 }, ["Height"] = Input { Value = 0.25 }, ["Red"] = Input { Value = 0.93 }, ["Green"] = Input { Value = 0.9 }, ["Blue"] = Input { Value = 0.85 }, ["Angle"] = Input { SourceOp = "TurningAngle", Source = "Value" }, } },
+		TurningAngle = BezierSpline { KeyFrames = { [0] = { 0, RH = { 6.6667, 0 } }, [20] = { 120, LH = { 13.3333, 120 } }, } },
+		All = sMerge { Inputs = { ["Input1"] = Input { SourceOp = "Pentagon", Source = "Output" }, ["Input2"] = Input { SourceOp = "Hexagon", Source = "Output" }, ["Input3"] = Input { SourceOp = "Turning", Source = "Output" }, } },
+		Render = sRender { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["Input"] = Input { SourceOp = "All", Source = "Output" }, } },
+		Back = Background { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["TopLeftRed"] = Input { Value = 0.08 }, ["TopLeftGreen"] = Input { Value = 0.08 }, ["TopLeftBlue"] = Input { Value = 0.1 }, } },
+		Over = Merge { Inputs = { ["Background"] = Input { SourceOp = "Back", Source = "Output" }, ["Foreground"] = Input { SourceOp = "Render", Source = "Output" }, } },
+		MediaOut1 = Saver { Inputs = { ["Index"] = Input { Value = "0" }, ["Input"] = Input { SourceOp = "Over", Source = "Output" }, } },
+	},
+}

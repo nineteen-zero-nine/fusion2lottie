@@ -1,0 +1,212 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 149 },
+	GlobalRange = { 0, 149 },
+	CurrentID = 12,
+	PlaybackUpdateMode = 0,
+	StereoMode = false,
+	Version = "DaVinci Resolve Studio 21.1.1.0010",
+	SavedOutputs = 0,
+	HeldTools = 0,
+	DisabledTools = 0,
+	LockedTools = 0,
+	AudioOffset = 0,
+	Resumable = true,
+	OutputClips = {
+	},
+	Tools = {
+		Render = sRender {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 512, },
+				Height = Input { Value = 512, },
+				Input = Input {
+					SourceOp = "All",
+					Source = "Output",
+				}
+			},
+		},
+		MediaOut1 = Saver {
+			Inputs = {
+				Index = Input { Value = "0", },
+				Input = Input {
+					SourceOp = "Over",
+					Source = "Output",
+				}
+			},
+		},
+		Over = Merge {
+			Inputs = {
+				Background = Input {
+					SourceOp = "Back",
+					Source = "Output",
+				},
+				Foreground = Input {
+					SourceOp = "Render",
+					Source = "Output",
+				}
+			},
+		},
+		Bevel = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Solid = Input { Value = 0, },
+				BorderWidth = Input { Value = 0.025, },
+				JoinStyle = Input { Value = 0, },
+				CapStyle = Input { Value = 0, },
+				Center = Input { Value = { -0.25, -0.15 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Points = {
+							{ Linear = true, X = -0.15, Y = -0.05, RX = 0.05, RY = 0.0433333333333333 },
+							{ Linear = true, X = 0, Y = 0.08, LX = -0.05, LY = -0.0433333333333333, RX = 0.05, RY = -0.0433333333333333 },
+							{ Linear = true, X = 0.15, Y = -0.05, LX = -0.05, LY = 0.0433333333333333 }
+						}
+					},
+				},
+				Red = Input { Value = 0.93, },
+				Green = Input { Value = 0.9, },
+				Blue = Input { Value = 0.85, }
+			},
+		},
+		ThickBorderWidth = BezierSpline {
+			SplineColor = { Red = 16, Green = 35, Blue = 248 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[0] = { 0.005, RH = { 6.6667, 0.005 } },
+				[20] = { 0.04, LH = { 13.3333, 0.04 } }
+			}
+		},
+		Back = Background {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 512, },
+				Height = Input { Value = 512, },
+				TopLeftRed = Input { Value = 0.08, },
+				TopLeftGreen = Input { Value = 0.08, },
+				TopLeftBlue = Input { Value = 0.1, }
+			},
+		},
+		Thick = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Solid = Input { Value = 0, },
+				BorderWidth = Input {
+					SourceOp = "ThickBorderWidth",
+					Source = "Value",
+				},
+				Center = Input { Value = { 0, -0.32 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Points = {
+							{ Linear = true, X = -0.15, Y = -0.05, RX = 0.05, RY = 0.0433333333333333 },
+							{ Linear = true, X = 0, Y = 0.08, LX = -0.05, LY = -0.0433333333333333, RX = 0.05, RY = -0.0433333333333333 },
+							{ Linear = true, X = 0.15, Y = -0.05, LX = -0.05, LY = 0.0433333333333333 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9, },
+				Green = Input { Value = 0.35, },
+				Blue = Input { Value = 0.2, }
+			},
+		},
+		All = sMerge {
+			Inputs = {
+				Input1 = Input {
+					SourceOp = "Frame",
+					Source = "Output",
+				},
+				Input2 = Input {
+					SourceOp = "Ring",
+					Source = "Output",
+				},
+				Input4 = Input {
+					SourceOp = "Round",
+					Source = "Output",
+				},
+				Input5 = Input {
+					SourceOp = "Thick",
+					Source = "Output",
+				},
+				Input3 = Input {
+					SourceOp = "Bevel",
+					Source = "Output",
+				}
+			},
+		},
+		Frame = sRectangle {
+			Inputs = {
+				Solid = Input { Value = 0, },
+				BorderWidth = Input { Value = 0.02, },
+				["Translate.X"] = Input { Value = -0.25, },
+				["Translate.Y"] = Input { Value = 0.2, },
+				Width = Input { Value = 0.3, },
+				Height = Input { Value = 0.2, },
+				Red = Input { Value = 0.9, },
+				Green = Input { Value = 0.35, },
+				Blue = Input { Value = 0.2, }
+			},
+			Version = 1
+		},
+		Ring = sEllipse {
+			Inputs = {
+				Solid = Input { Value = 0, },
+				BorderWidth = Input { Value = 0.01, },
+				["Translate.X"] = Input { Value = 0.2, },
+				["Translate.Y"] = Input { Value = 0.2, },
+				Width = Input { Value = 0.25, },
+				Height = Input { Value = 0.25, },
+				Red = Input { Value = 0.2, },
+				Green = Input { Value = 0.75, },
+				Blue = Input { Value = 0.7, }
+			},
+		},
+		Round = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Solid = Input { Value = 0, },
+				BorderWidth = Input { Value = 0.025, },
+				JoinStyle = Input { Value = 2, },
+				CapStyle = Input { Value = 2, },
+				Center = Input { Value = { 0.2, -0.15 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Points = {
+							{ Linear = true, X = -0.15, Y = -0.05, RX = 0.05, RY = 0.0433333333333333 },
+							{ Linear = true, X = 0, Y = 0.08, LX = -0.05, LY = -0.0433333333333333, RX = 0.05, RY = -0.0433333333333333 },
+							{ Linear = true, X = 0.15, Y = -0.05, LX = -0.05, LY = 0.0433333333333333 }
+						}
+					},
+				},
+				Red = Input { Value = 0.93, },
+				Green = Input { Value = 0.9, },
+				Blue = Input { Value = 0.85, }
+			},
+		}
+	},
+	Frames = {
+	},
+	Prefs = {
+		Comp = {
+			Interactive = {
+				Proxy = {
+					Scale = 1,
+				},
+			},
+			Paths = {
+				Map = {
+				},
+			},
+			FrameFormat = {
+				Width = 512,
+				Height = 512,
+				DepthFull = 3,
+				DepthPreview = 3,
+				DepthInteractive = 3,
+			},
+			Unsorted = {
+				GlobalEnd = 149
+			},
+		}
+	},
+}
