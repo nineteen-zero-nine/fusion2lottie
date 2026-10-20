@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="f2l-bg" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#231A3D"/>
+      <stop offset="1" stop-color="#0C1F22"/>
+    </linearGradient>
+    <linearGradient id="f2l-curve" x1="236" y1="752" x2="788" y2="272" gradientUnits="userSpaceOnUse">
+      <stop offset=".1" stop-color="#8B6CFF"/>
+      <stop offset=".9" stop-color="#00DDB3"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0 0) scale(1.0)">
+    <rect width="1024" height="1024" rx="232" fill="url(#f2l-bg)"/>
+    <rect x="6" y="6" width="1012" height="1012" rx="226" fill="none" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="12"/>
+    <path d="M120 272H904M272 120V904" stroke="#FFFFFF" stroke-opacity=".05" stroke-width="6"/>
+    <path d="M120 512H904M512 120V904" stroke="#FFFFFF" stroke-opacity=".05" stroke-width="6"/>
+    <path d="M120 752H904M752 120V904" stroke="#FFFFFF" stroke-opacity=".05" stroke-width="6"/>
+    <path d="M236 752H560M788 272H464" stroke="#FFFFFF" stroke-opacity=".5" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="560" cy="752" r="26" fill="#FFFFFF" fill-opacity=".9"/>
+    <circle cx="464" cy="272" r="26" fill="#FFFFFF" fill-opacity=".9"/>
+    <path d="M236 752 C560 752 464 272 788 272" fill="none" stroke="url(#f2l-curve)" stroke-width="60" stroke-linecap="round"/>
+    <rect x="140" y="688" width="192" height="128" rx="34" fill="#8B6CFF"/>
+    <rect x="176" y="724" width="120" height="56" rx="14" fill="#15131F" fill-opacity=".35"/>
+    <circle cx="788" cy="272" r="76" fill="#00DDB3"/>
+    <circle cx="788" cy="272" r="30" fill="#15131F" fill-opacity=".35"/>
+  </g>
+</svg>

@@ -1,4 +1,7 @@
-# fusion2lottie
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/nineteen-zero-nine/fusion2lottie/main/logo/logo-dark.png">
+  <img alt="fusion2lottie" src="https://raw.githubusercontent.com/nineteen-zero-nine/fusion2lottie/main/logo/logo.png" width="480">
+</picture>
 
 [![CI](https://github.com/nineteen-zero-nine/fusion2lottie/actions/workflows/ci.yml/badge.svg)](https://github.com/nineteen-zero-nine/fusion2lottie/actions/workflows/ci.yml)
 
