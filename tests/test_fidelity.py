@@ -46,7 +46,9 @@ def off_percent(a: Image.Image, b: Image.Image) -> float:
 @pytest.mark.parametrize("name", NAMES)
 def test_matches_resolve(name):
     resolve_frames = sorted((FIXTURES / name).glob("f_*.png"))
-    lottie, _ = convert(parse((FIXTURES / f"{name}.comp").read_text()), fps=30)
+    samples_file = FIXTURES / f"{name}.samples.json"
+    samples = json.loads(samples_file.read_text()) if samples_file.exists() else None
+    lottie, _ = convert(parse((FIXTURES / f"{name}.comp").read_text()), fps=30, samples=samples)
     out = OUT / name
     shutil.rmtree(out, ignore_errors=True)
     out.mkdir(parents=True)

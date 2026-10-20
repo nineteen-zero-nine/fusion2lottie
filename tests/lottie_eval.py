@@ -43,3 +43,20 @@ def find(node, name):
 
 def transform_of(group):
     return next(item for item in group["it"] if item["ty"] == "tr")
+
+
+def vertex_at(path_prop, frame, index=0):
+    """One vertex of a Lottie path at a frame, blending keyframed paths by their easing the way players do."""
+    if not path_prop["a"]:
+        return path_prop["k"]["v"][index]
+    keys = path_prop["k"]
+    if frame <= keys[0]["t"]:
+        return keys[0]["s"][0]["v"][index]
+    for a, b in zip(keys, keys[1:]):
+        if a["t"] <= frame < b["t"]:
+            x = (frame - a["t"]) / (b["t"] - a["t"])
+            o, i = a["o"], a["i"]
+            y = bezier_ease(o["x"], o["y"], i["x"], i["y"], x)
+            va, vb = a["s"][0]["v"][index], b["s"][0]["v"][index]
+            return [va[d] + (vb[d] - va[d]) * y for d in (0, 1)]
+    return keys[-1]["s"][0]["v"][index]

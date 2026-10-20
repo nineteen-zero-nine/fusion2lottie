@@ -1,8 +1,8 @@
 Composition {
-	CurrentTime = 0,
-	RenderRange = { 0, 149 },
+	CurrentTime = 20,
+	RenderRange = { 0, 20 },
 	GlobalRange = { 0, 149 },
-	CurrentID = 10,
+	CurrentID = 11,
 	PlaybackUpdateMode = 0,
 	StereoMode = false,
 	Version = "DaVinci Resolve Studio 21.1.1.0010",
@@ -130,6 +130,7 @@ Composition {
 			},
 			Paths = {
 				Map = {
+					["ResolveCaches:"] = "/path/to/CacheClip/Fusion",
 				},
 			},
 			FrameFormat = {

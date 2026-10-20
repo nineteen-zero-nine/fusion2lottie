@@ -136,4 +136,20 @@ comp("write-on", [
                   anim={"WriteLength": [(0, 0), (20, 1)]})),
 ])
 
+comp("sampled", [
+    ("Orbit", tool("Orbit", "sEllipse", {"Width": "Value = 0.12", "Height": "Value = 0.12", **color(0.9, 0.35, 0.2),
+                                         "Translate.X": 'Value = 0, Expression = "0.25 * cos(time / 4)"',
+                                         "Translate.Y": 'Value = 0, Expression = "0.25 * sin(time / 4)"'})),
+    ("Wobble", tool("Wobble", "sRectangle", {"Width": "Value = 0.3", "Height": "Value = 0.06",
+                                             **color(0.2, 0.75, 0.7), "Angle": 'SourceOp = "WobbleAngle", Source = "X"'})),
+    ("Pulse", tool("Pulse", "sPolygon", {"Center": 'Value = { 0, -0.3 }, Expression = "Point(0.1 * sin(time / 3), -0.3)"',
+                                         "Size": 'Value = 1, Expression = "0.6 + 0.4 * sin(time / 2)"',
+                                         "Polyline": open_path, "Solid": "Value = 0", "BorderWidth": "Value = 0.02",
+                                         **color(0.93, 0.9, 0.85)})),
+])
+# A Shake modifier (Fusion's random wobble) drives the rectangle's angle.
+(OUT / "sampled.comp").write_text((OUT / "sampled.comp").read_text().replace(
+    "\tTools = {\n", '\tTools = {\n\t\tWobbleAngle = Shake { Inputs = { RandomSeed = Input { Value = 7 }, '
+    'Smoothness = Input { Value = 4 }, XMinimum = Input { Value = -30 }, XMaximum = Input { Value = 30 } } },\n', 1))
+
 print("wrote", ", ".join(sorted(p.stem for p in OUT.glob("*.comp"))))

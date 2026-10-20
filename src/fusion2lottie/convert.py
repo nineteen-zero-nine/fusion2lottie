@@ -8,6 +8,10 @@ cubic-bezier keyframes. Both facts the mapping rests on were checked against Res
 - A Fusion BezierSpline segment is a cubic Bezier in (time, value), the model Lottie's easing uses, so keyframes
   convert exactly. Only channels whose key times differ are sampled once per frame ("baked").
 
+Inputs driven by an expression or by a modifier other than keyframes can only be evaluated by Fusion. They convert
+when their values are supplied per frame (`samples`, keyed "Tool.Input"): the Resolve script samples them through
+Fusion's API, and `needs_samples` lists which.
+
 Anything outside the supported subset is reported, never approximated: `convert` raises `ConversionError` naming
 every problem, and `check` returns them.
 """
@@ -32,6 +36,7 @@ PRIMITIVES = {
 }
 # Fusion's JoinStyle and CapStyle to Lottie's lj (1 miter, 2 round, 3 bevel) and lc (1 butt, 2 round, 3 square).
 JOINS = {0: 3, 1: 2, 2: 1}
+POINT_INPUTS = {"Center"}
 CAPS = {0: 1, 1: 2, 2: 3}
 
 
@@ -55,44 +60,61 @@ class Unsupported(Exception):
     """Raised inside the converter for one tool; recorded as a problem and the tool skipped."""
 
 
-def convert(comp: Table, fps: float = 30.0) -> tuple[dict, list[str]]:
+def convert(comp: Table, fps: float = 30.0, samples: dict | None = None) -> tuple[dict, list[str]]:
     """Return (lottie, notes). Raise ConversionError when the comp uses anything outside the supported subset."""
-    converter = _Converter(comp, fps)
+    converter = _Converter(comp, fps, samples)
     lottie = converter.export()
     if converter.problems:
         raise ConversionError(converter.problems)
     return lottie, converter.notes
 
 
-def check(comp: Table, fps: float = 30.0) -> list[str]:
+def check(comp: Table, fps: float = 30.0, samples: dict | None = None) -> list[str]:
     """Every problem that would stop `convert`, without writing anything."""
-    converter = _Converter(comp, fps)
+    converter = _Converter(comp, fps, samples)
     converter.export()
     return converter.problems
 
 
+def needs_samples(comp: Table) -> list[str]:
+    """The inputs ("Tool.Input") only Fusion can evaluate, which `convert` needs as samples."""
+    converter = _Converter(comp, 30.0, None)
+    converter.export()
+    return converter.needs
+
+
+def frame_range(comp: Table) -> tuple[int, int]:
+    """The first and last frame of the animation: Resolve sets GlobalRange to the clip's length, so RenderRange."""
+    rng = comp.get("RenderRange")
+    rng = rng if rng is not None else comp["GlobalRange"]
+    start, end = (int(v) for v in rng.items_)
+    return start, end
+
+
 class _Converter:
-    def __init__(self, comp: Table, fps: float):
+    def __init__(self, comp: Table, fps: float, samples: dict | None):
         if not isinstance(comp, Table) or comp.kind != "Composition":
             raise ConversionError(["not a Fusion composition (expected `Composition { ... }`)"])
         self.tools = comp["Tools"]
         self.fps = fps
         fmt = comp.get("Prefs", {}).get("Comp", {}).get("FrameFormat", {})
         self.w, self.h = int(fmt.get("Width", 1920)), int(fmt.get("Height", 1080))
-        # Resolve sets GlobalRange to the clip's length; the animation's own range is RenderRange.
-        rng = comp.get("RenderRange")
-        rng = rng if rng is not None else comp["GlobalRange"]
-        self.start, self.end = (int(v) for v in rng.items_)
+        self.start, self.end = frame_range(comp)
+        self.samples = samples or {}
         self.problems: list[str] = []
         self.notes: list[str] = []
+        self.needs: list[str] = []
 
     # --- inputs -------------------------------------------------------------------------------------------------
 
     def raw(self, tool, name, default=None):
-        """An input's static value, ('op', name) when it is driven by another tool, or `default`."""
+        """An input's static value, ('op', name) when another tool drives it, ('expr', text) for an expression, or
+        `default`."""
         inp = self.tools[tool].get("Inputs", {}).get(name)
         if inp is None:
             return default
+        if "Expression" in inp:
+            return ("expr", inp["Expression"])
         if "SourceOp" in inp:
             return ("op", inp["SourceOp"])
         val = inp.get("Value", default)
@@ -104,7 +126,28 @@ class _Converter:
 
     def source(self, tool, name):
         r = self.raw(tool, name)
-        return r[1] if isinstance(r, tuple) else None
+        return r[1] if isinstance(r, tuple) and r[0] == "op" else None
+
+    def sampled(self, tool, name, why):
+        """The values Fusion gave an input at every frame, from `samples`; recorded as needed when missing."""
+        key = f"{tool}.{name}"
+        values = self.samples.get(key)
+        if values is None:
+            # Record it and carry on with placeholders, so one pass names every input to sample.
+            if key not in self.needs:
+                self.needs.append(key)
+                self.problems.append(f"{key}: driven by {why}, which only Fusion can evaluate — export from Resolve "
+                                     "with the Export to Lottie script, or pass its values per frame (--samples)")
+            return [[0.0, 0.0] if name in POINT_INPUTS else 0.0] * (self.end - self.start + 1)
+        if len(values) != self.end - self.start + 1:
+            raise Unsupported(f"{key}: {len(values)} samples for {self.end - self.start + 1} frames")
+        return values
+
+    def driver(self, r):
+        if r[0] == "expr":
+            return f"the expression `{r[1]}`"
+        node = self.tools.get(r[1])
+        return f"{r[1]} ({node.kind if node is not None else 'missing'})"
 
     def spline(self, op):
         node = self.tools.get(op)
@@ -118,10 +161,13 @@ class _Converter:
         return keys
 
     def number(self, tool, name, default):
-        """A scalar input as ('static', value) or ('keys', keyframes)."""
+        """A scalar input as ('static', value), ('keys', keyframes) or ('sampled', a value per frame)."""
         r = self.raw(tool, name, default)
         if isinstance(r, tuple):
-            return ("keys", self.spline(r[1]))
+            node = self.tools.get(r[1]) if r[0] == "op" else None
+            if node is not None and node.kind == "BezierSpline":
+                return ("keys", self.spline(r[1]))
+            return ("sampled", [float(v) for v in self.sampled(tool, name, self.driver(r))])
         return ("static", float(r))
 
     def static(self, tool, name, default):
@@ -152,6 +198,12 @@ class _Converter:
     def value_at(self, channel, t):
         if channel[0] == "static":
             return channel[1]
+        if channel[0] == "sampled":
+            values = channel[1]
+            f = min(max(t - self.start, 0), len(values) - 1)
+            lo = int(f)
+            hi = min(lo + 1, len(values) - 1)
+            return values[lo] + (values[hi] - values[lo]) * (f - lo)
         keys = channel[1]
         if t <= keys[0]["t"]:
             return keys[0]["v"]
@@ -185,6 +237,8 @@ class _Converter:
         if all(c[0] == "static" for c in channels):
             vals = [m(c[1]) for c, m in zip(channels, maps)]
             return {"a": 0, "k": vals if len(vals) > 1 else vals[0]}
+        if any(c[0] == "sampled" for c in channels):
+            return self.baked(channels, maps)
         animated = [c for c in channels if c[0] == "keys"]
         times = [tuple(k["t"] for k in c[1]) for c in animated]
         if all(t == times[0] for t in times):
@@ -231,7 +285,10 @@ class _Converter:
                 "sk": {"a": 0, "k": 0}, "sa": {"a": 0, "k": 0}}
 
     def point(self, tool, name, default):
-        r = self.static(tool, name, default)
+        r = self.raw(tool, name, default)
+        if isinstance(r, tuple):
+            values = self.sampled(tool, name, self.driver(r))
+            return [("sampled", [float(p[0]) for p in values]), ("sampled", [float(p[1]) for p in values])]
         return [("static", float(r[0])), ("static", float(r[1]))]
 
     # --- shape tools --------------------------------------------------------------------------------------------
@@ -292,15 +349,16 @@ class _Converter:
         """A path whose shape follows animated inputs: keyframed when one easing curve moves every vertex exactly as
         Fusion does, otherwise sampled once per frame."""
         animated = {n: c for n, c in channels.items() if c[0] == "keys"}
+        sampled = any(c[0] == "sampled" for c in channels.values())
         values = {n: c[1] for n, c in channels.items()}
-        if not animated:
+        if not animated and not sampled:
             return {"a": 0, "k": self.to_path(geometry(**values))}
 
         def at(t):
             return geometry(**{n: self.value_at(c, t) for n, c in channels.items()})
 
         times = {tuple(k["t"] for k in c[1]) for c in animated.values()}
-        if len(times) == 1:
+        if len(times) == 1 and not sampled:
             times = list(times.pop())
             eases = [{self.ease(c, s) for c in animated.values()} for s in range(len(times) - 1)]
             if all(len(e) == 1 and None not in e for e in eases):
@@ -348,22 +406,25 @@ class _Converter:
         pl = self.static(tool, "Polyline", None)
         if pl is None:
             raise Unsupported(f"{tool}: has no polyline")
-        v, i, o = [], [], []
-        for p in pl["Points"].items_:
-            v.append([p["X"] * self.w, -p["Y"] * self.w])
-            if p.get("Linear"):
-                i.append([0, 0])
-                o.append([0, 0])
-            else:
-                i.append([p.get("LX", 0) * self.w, -p.get("LY", 0) * self.w])
-                o.append([p.get("RX", 0) * self.w, -p.get("RY", 0) * self.w])
-        path = {"ty": "sh", "nm": f"{tool} path",
-                "ks": {"a": 0, "k": {"c": bool(pl.get("Closed")), "v": v, "i": i, "o": o}}}
-        size = self.number(tool, "Size", 1.0)
-        tr = self.transform(tool, pos=self.point(tool, "Center", [0, 0]), scale=[size, size],
+        points = pl["Points"].items_
+        v = [(p["X"], p["Y"]) for p in points]
+        i = [(0, 0) if p.get("Linear") else (p.get("LX", 0), p.get("LY", 0)) for p in points]
+        o = [(0, 0) if p.get("Linear") else (p.get("RX", 0), p.get("RY", 0)) for p in points]
+
+        def geometry(size):
+            return ([(x * size, y * size) for x, y in v], [(x * size, y * size) for x, y in i],
+                    [(x * size, y * size) for x, y in o])
+
+        # Size scales the polyline about Center, not the outline's width, so it goes into the path rather than the
+        # group's scale (which would scale a stroke too).
+        ks = self.path_prop({"size": self.number(tool, "Size", 1.0)}, geometry)
+        closed = bool(pl.get("Closed"))
+        for path in [ks["k"]] if not ks["a"] else [k["s"][0] for k in ks["k"]]:
+            path["c"] = closed
+        tr = self.transform(tool, pos=self.point(tool, "Center", [0, 0]), scale=[("static", 1.0)] * 2,
                             rot=self.number(tool, "ZRotation", 0.0), opacity=self.number(tool, "Opacity", 1.0))
         tr["a"] = {"a": 0, "k": [0, 0]}  # the polyline is drawn around Center
-        return {"ty": "gr", "nm": tool, "it": [path, *self.paint(tool), tr]}
+        return {"ty": "gr", "nm": tool, "it": [{"ty": "sh", "nm": f"{tool} path", "ks": ks}, *self.paint(tool), tr]}
 
     def smerge(self, tool):
         inputs = self.tools[tool].get("Inputs", {})
@@ -379,7 +440,9 @@ class _Converter:
 
         def offset(channel, by):
             kind, val = channel
-            return (kind, [dict(k, v=k["v"] + by) for k in val] if kind == "keys" else val + by)
+            if kind == "keys":
+                return (kind, [dict(k, v=k["v"] + by) for k in val])
+            return (kind, [v + by for v in val] if kind == "sampled" else val + by)
 
         pos = [offset(self.number(tool, "XOffset", 0.0), pivot[0]), offset(self.number(tool, "YOffset", 0.0), pivot[1])]
         tr = self.transform(tool, anchor=pivot, pos=pos,

@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from fusion2lottie import ConversionError, check, convert, parse
-from lottie_eval import find, transform_of, value_at
+from fusion2lottie import ConversionError, check, convert, needs_samples, parse
+from lottie_eval import find, transform_of, value_at, vertex_at
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -31,9 +31,13 @@ def test_keyframes_play_back_at_fusions_values(intro):
     rotation = transform_of(find(intro, "Feather1"))["r"]
     for frame, fusion in FUSION_FEATHER1_ROTATION.items():
         assert value_at(rotation, frame) == pytest.approx(-fusion, abs=1e-3)  # Lottie turns clockwise
-    scale = transform_of(find(intro, "Diamond"))["s"]
+    # Size scales the diamond's polyline (not its group, which would also scale an outline's width).
+    path = next(item for item in find(intro, "Diamond")["it"] if item["ty"] == "sh")["ks"]
+    full = vertex_at(path, 50)  # Size is 1 from frame 50
     for frame, fusion in FUSION_DIAMOND_SIZE.items():
-        assert value_at(scale, frame) == pytest.approx(fusion * 100, abs=1e-2)
+        v = vertex_at(path, frame)
+        assert v[0] == pytest.approx(full[0] * fusion, abs=1e-2) and v[1] == pytest.approx(full[1] * fusion, abs=1e-2)
+    assert len(path["k"]) == 3  # still the three keyframes Fusion has, not sampled
 
 
 def test_keyframes_convert_exactly_without_sampling(intro):
@@ -81,12 +85,34 @@ def test_every_problem_is_listed_not_just_the_first():
     assert e.value.problems == problems
 
 
-def test_modifiers_other_than_keyframes_are_refused():
-    text = comp_with('Spin = sPolygon { Inputs = { ZRotation = Input { SourceOp = "Wobble", Source = "Value" }, '
-                     'Polyline = Input { Value = Polyline { Closed = true, Points = { { X = 0, Y = 0 } } } } } },'
-                     'Wobble = Perturb { },'
-                     'Render = sRender { Inputs = { Input = Input { SourceOp = "Spin", Source = "Output" } } },')
-    assert check(parse(text)) == ["Wobble: Perturb modifier — only BezierSpline keyframes convert"]
+SPIN = ('Spin = sPolygon { Inputs = { ZRotation = Input { SourceOp = "Wobble", Source = "Value" }, '
+        'Center = Input { Value = { 0.1, 0 }, Expression = "Point(time / 100, 0)" }, '
+        'Polyline = Input { Value = Polyline { Closed = true, Points = { { X = 0, Y = 0 }, { X = 0.1, Y = 0 }, '
+        '{ X = 0, Y = 0.1 } } } } } },'
+        'Wobble = Perturb { },'
+        'Render = sRender { Inputs = { Input = Input { SourceOp = "Spin", Source = "Output" } } },')
+
+
+def test_expressions_and_modifiers_need_fusions_values():
+    comp = parse(comp_with(SPIN))
+    assert sorted(needs_samples(comp)) == ["Spin.Center", "Spin.ZRotation"]
+    problems = sorted(check(comp))
+    assert problems[0].startswith("Spin.Center: driven by the expression `Point(time / 100, 0)`")
+    assert problems[1].startswith("Spin.ZRotation: driven by Wobble (Perturb), which only Fusion can evaluate")
+
+
+def test_sampled_values_become_a_keyframe_per_frame():
+    samples = {"Spin.ZRotation": [f * 3.0 for f in range(10)], "Spin.Center": [[f / 100, 0.0] for f in range(10)]}
+    lottie, _ = convert(parse(comp_with(SPIN)), samples=samples)
+    tr = transform_of(find(lottie, "Spin"))
+    assert len(tr["r"]["k"]) == 10
+    assert value_at(tr["r"], 4) == pytest.approx(-12.0)
+    assert value_at(tr["p"], 5) == pytest.approx(1920 / 2 + 0.05 * 1920)  # a comp without a frame format is 1920 wide
+
+
+def test_samples_must_cover_every_frame():
+    samples = {"Spin.ZRotation": [0.0] * 3, "Spin.Center": [[0.0, 0.0]] * 10}
+    assert check(parse(comp_with(SPIN)), samples=samples) == ["Spin.ZRotation: 3 samples for 10 frames"]
 
 
 def test_a_transformed_merge_is_refused():

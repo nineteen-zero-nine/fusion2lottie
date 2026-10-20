@@ -1,0 +1,16 @@
+Composition {
+	CurrentTime = 0,
+	RenderRange = { 0, 20 },
+	GlobalRange = { 0, 20 },
+	Tools = {
+		WobbleAngle = Shake { Inputs = { RandomSeed = Input { Value = 7 }, Smoothness = Input { Value = 4 }, XMinimum = Input { Value = -30 }, XMaximum = Input { Value = 30 } } },
+		Orbit = sEllipse { Inputs = { ["Width"] = Input { Value = 0.12 }, ["Height"] = Input { Value = 0.12 }, ["Red"] = Input { Value = 0.9 }, ["Green"] = Input { Value = 0.35 }, ["Blue"] = Input { Value = 0.2 }, ["Translate.X"] = Input { Value = 0, Expression = "0.25 * cos(time / 4)" }, ["Translate.Y"] = Input { Value = 0, Expression = "0.25 * sin(time / 4)" }, } },
+		Wobble = sRectangle { Inputs = { ["Width"] = Input { Value = 0.3 }, ["Height"] = Input { Value = 0.06 }, ["Red"] = Input { Value = 0.2 }, ["Green"] = Input { Value = 0.75 }, ["Blue"] = Input { Value = 0.7 }, ["Angle"] = Input { SourceOp = "WobbleAngle", Source = "X" }, } },
+		Pulse = sPolygon { Inputs = { ["Center"] = Input { Value = { 0, -0.3 }, Expression = "Point(0.1 * sin(time / 3), -0.3)" }, ["Size"] = Input { Value = 1, Expression = "0.6 + 0.4 * sin(time / 2)" }, ["Polyline"] = Input { Value = Polyline { Closed = false, Points = { { Linear = true, X = -0.15, Y = -0.05 }, { Linear = true, X = 0, Y = 0.08 }, { Linear = true, X = 0.15, Y = -0.05 } } } }, ["Solid"] = Input { Value = 0 }, ["BorderWidth"] = Input { Value = 0.02 }, ["Red"] = Input { Value = 0.93 }, ["Green"] = Input { Value = 0.9 }, ["Blue"] = Input { Value = 0.85 }, } },
+		All = sMerge { Inputs = { ["Input1"] = Input { SourceOp = "Orbit", Source = "Output" }, ["Input2"] = Input { SourceOp = "Wobble", Source = "Output" }, ["Input3"] = Input { SourceOp = "Pulse", Source = "Output" }, } },
+		Render = sRender { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["Input"] = Input { SourceOp = "All", Source = "Output" }, } },
+		Back = Background { Inputs = { ["Width"] = Input { Value = 512 }, ["Height"] = Input { Value = 512 }, ["TopLeftRed"] = Input { Value = 0.08 }, ["TopLeftGreen"] = Input { Value = 0.08 }, ["TopLeftBlue"] = Input { Value = 0.1 }, } },
+		Over = Merge { Inputs = { ["Background"] = Input { SourceOp = "Back", Source = "Output" }, ["Foreground"] = Input { SourceOp = "Render", Source = "Output" }, } },
+		MediaOut1 = Saver { Inputs = { ["Index"] = Input { Value = "0" }, ["Input"] = Input { SourceOp = "Over", Source = "Output" }, } },
+	},
+}
