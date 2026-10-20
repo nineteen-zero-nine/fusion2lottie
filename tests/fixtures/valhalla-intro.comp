@@ -1,0 +1,815 @@
+Composition {
+	CurrentTime = 89,
+	RenderRange = { 0, 89 },
+	GlobalRange = { 0, 149 },
+	CurrentID = 48,
+	PlaybackUpdateMode = 0,
+	StereoMode = false,
+	Version = "DaVinci Resolve Studio 21.1.1.0010",
+	SavedOutputs = 0,
+	HeldTools = 0,
+	DisabledTools = 0,
+	LockedTools = 0,
+	AudioOffset = 0,
+	Resumable = true,
+	OutputClips = {
+	},
+	Tools = {
+		Letter7Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[52] = { 0, RH = { 55.3333, 0.333333 }, Flags = { Linear = true } },
+				[62] = { 1, LH = { 58.6667, 0.666667 } }
+			}
+		},
+		Feather2 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.021582, -0.045215 }, },
+				ZRotation = Input {
+					SourceOp = "Feather2ZRotation",
+					Source = "Value",
+				},
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.1104, Y = 0.179639, LX = 0.0162626666666667, LY = -0.008998, RX = 0.001237, RY = -0.00234399999999999 },
+							{ Linear = true, X = -0.106689, Y = 0.172607, LX = -0.001237, LY = 0.00234399999999999, RX = -0.0640136666666667, RY = 0.0299643333333333 },
+							{ Linear = true, X = -0.29873, Y = 0.2625, LX = 0.0640136666666667, LY = -0.0299643333333333, RX = 0.00774733333333333, RY = -0.0178223333333333 },
+							{ Linear = true, X = -0.275488, Y = 0.209033, LX = -0.00774733333333333, LY = 0.0178223333333333, RX = 0.057731, RY = -0.0234373333333333 },
+							{ Linear = true, X = -0.102295, Y = 0.138721, LX = -0.057731, LY = 0.0234373333333333, RX = 0.000764999999999997, RY = -0.00162766666666667 },
+							{ Linear = true, X = -0.1, Y = 0.133838, LX = -0.000764999999999997, LY = 0.00162766666666667, RX = 0.0180003333333333, RY = -0.00730766666666667 },
+							{ Linear = true, X = -0.045999, Y = 0.111915, LX = -0.0180003333333333, LY = 0.00730766666666667, RX = -0.00520433333333333, RY = 0.0135766666666667 },
+							{ Linear = true, X = -0.061612, Y = 0.152645, LX = 0.00520433333333333, LY = -0.0135766666666667, RX = -0.0162626666666667, RY = 0.008998 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Feather2Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Letter1 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.32561, -0.205591 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.034106, Y = 0.030688, LX = 0.00476866666666666, LY = 0.000195333333333334, RX = 0.00976533333333333, RY = -0.020654 },
+							{ Linear = true, X = -0.00481, Y = -0.031274, LX = -0.00976533333333333, LY = 0.020654, RX = 0.00306, RY = 9.76666666666672e-05 },
+							{ Linear = true, X = 0.00437, Y = -0.030981, LX = -0.00306, LY = -9.76666666666672e-05, RX = 0.009912, RY = 0.0207516666666667 },
+							{ Linear = true, X = 0.034106, Y = 0.031274, LX = -0.009912, LY = -0.0207516666666667, RX = -0.00465466666666667, RY = 0 },
+							{ Linear = true, X = 0.020142, Y = 0.031274, LX = 0.00465466666666667, LY = -0, RX = -0.00673833333333333, RY = -0.0143716666666667 },
+							{ Linear = true, X = -7.3e-05, Y = -0.011841, LX = 0.00673833333333333, LY = 0.0143716666666667, RX = -0.00657566666666667, RY = 0.0143716666666667 },
+							{ Linear = true, X = -0.0198, Y = 0.031274, LX = 0.00657566666666667, LY = -0.0143716666666667, RX = -0.00476866666666666, RY = -0.000195333333333334 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter1Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Feather6Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[6] = { 0, RH = { 8, 0.333333 }, Flags = { Linear = true } },
+				[12] = { 1, LH = { 10, 0.666667 } }
+			}
+		},
+		WordmarkYOffset = BezierSpline {
+			SplineColor = { Red = 252, Green = 57, Blue = 47 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[40] = { -0.02, RH = { 47.3333, -0.013333 } },
+				[62] = { 0, LH = { 54.6667, 0 } }
+			}
+		},
+		RightWing = sTransform {
+			Inputs = {
+				XSize = Input { Value = -1, },
+				Input = Input {
+					SourceOp = "LeftWing",
+					Source = "Output",
+				}
+			},
+		},
+		Letter5 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { 0.063989, -0.205591 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.003003, Y = 0.031274, LX = 0.00237633333333333, LY = -1.6000000000001e-05, RX = -0.00989566666666667, RY = -0.0208493333333333 },
+							{ Linear = true, X = -0.03269, Y = -0.031274, LX = 0.00989566666666667, LY = 0.0208493333333333, RX = 0.00458966666666667, RY = 9.76666666666672e-05 },
+							{ Linear = true, X = -0.018921, Y = -0.030981, LX = -0.00458966666666667, LY = -9.76666666666672e-05, RX = 0.006543, RY = 0.0137693333333333 },
+							{ Linear = true, X = 0.000708, Y = 0.010327, LX = -0.006543, LY = -0.0137693333333333, RX = 0.002832, RY = -0.00628266666666667 },
+							{ Linear = true, X = 0.009204, Y = -0.008521, LX = -0.002832, LY = 0.00628266666666667, RX = -0.003841, RY = -9.7333333333333e-05 },
+							{ Linear = true, X = -0.002319, Y = -0.008813, LX = 0.003841, LY = 9.7333333333333e-05, RX = -0.00151366666666667, RY = -0.003402 },
+							{ Linear = true, X = -0.00686, Y = -0.019019, LX = 0.00151366666666667, LY = 0.003402, RX = 0.00688466666666667, RY = -8.13333333333326e-05 },
+							{ Linear = true, X = 0.013794, Y = -0.019263, LX = -0.00688466666666667, LY = 8.13333333333326e-05, RX = 0.00179033333333333, RY = -0.00398766666666667 },
+							{ Linear = true, X = 0.019165, Y = -0.031226, LX = -0.00179033333333333, LY = 0.00398766666666667, RX = 0.00450833333333333, RY = 0 },
+							{ Linear = true, X = 0.03269, Y = -0.031226, LX = -0.00450833333333333, LY = -0, RX = -0.00952133333333333, RY = 0.0208173333333333 },
+							{ Linear = true, X = 0.004126, Y = 0.031226, LX = 0.00952133333333333, LY = -0.0208173333333333, RX = -0.00237633333333333, RY = 1.6000000000001e-05 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter5Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Feather3Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[18] = { 0, RH = { 20, 0.333333 }, Flags = { Linear = true } },
+				[24] = { 1, LH = { 22, 0.666667 } }
+			}
+		},
+		Feather2ZRotation = BezierSpline {
+			SplineColor = { Red = 128, Green = 128, Blue = 255 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[22] = { 38, RH = { 28, 25.333333 } },
+				[40] = { 0, LH = { 34, 0 } }
+			}
+		},
+		Letter4Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[46] = { 0, RH = { 49.3333, 0.333333 }, Flags = { Linear = true } },
+				[56] = { 1, LH = { 52.6667, 0.666667 } }
+			}
+		},
+		Letter3 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.128906, -0.205542 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.02002, Y = 0.031274, LX = 0.00415066666666667, LY = -9.76666666666672e-05, RX = 0, RY = -0.0208493333333333 },
+							{ Linear = true, X = -0.02002, Y = -0.031274, LX = -0, LY = 0.0208493333333333, RX = 0.0133466666666667, RY = 0 },
+							{ Linear = true, X = 0.02002, Y = -0.031274, LX = -0.0133466666666667, LY = -0, RX = 0, RY = 0.004069 },
+							{ Linear = true, X = 0.02002, Y = -0.019067, LX = -0, LY = -0.004069, RX = -0.00911466666666667, RY = 0 },
+							{ Linear = true, X = -0.007324, Y = -0.019067, LX = 0.00911466666666667, LY = -0, RX = -8.13333333333334e-05, RY = 0.0166826666666667 },
+							{ Linear = true, X = -0.007568, Y = 0.030981, LX = 8.13333333333334e-05, LY = -0.0166826666666667, RX = -0.00415066666666667, RY = 9.76666666666672e-05 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter3Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Feather5Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[10] = { 0, RH = { 12, 0.333333 }, Flags = { Linear = true } },
+				[16] = { 1, LH = { 14, 0.666667 } }
+			}
+		},
+		Letter7 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { 0.242432, -0.205566 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.020264, Y = 0.03125, LX = 0.004069, LY = -0, RX = 0, RY = -0.0208333333333333 },
+							{ Linear = true, X = -0.020264, Y = -0.03125, LX = -0, LY = 0.0208333333333333, RX = 0.0135093333333333, RY = 0 },
+							{ Linear = true, X = 0.020264, Y = -0.03125, LX = -0.0135093333333333, LY = -0, RX = 0, RY = 0.00408533333333333 },
+							{ Linear = true, X = 0.020264, Y = -0.018994, LX = -0, LY = -0.00408533333333333, RX = -0.00935866666666667, RY = -1.63333333333335e-05 },
+							{ Linear = true, X = -0.007812, Y = -0.019043, LX = 0.00935866666666667, LY = 1.63333333333335e-05, RX = -8.16666666666665e-05, RY = 0.0167643333333333 },
+							{ Linear = true, X = -0.008057, Y = 0.03125, LX = 8.16666666666665e-05, LY = -0.0167643333333333, RX = -0.004069, RY = 0 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter7Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Letter6Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[50] = { 0, RH = { 53.3333, 0.333333 }, Flags = { Linear = true } },
+				[60] = { 1, LH = { 56.6667, 0.666667 } }
+			}
+		},
+		Render = sRender {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 1024, },
+				Height = Input { Value = 1024, },
+				Input = Input {
+					SourceOp = "Logo",
+					Source = "Output",
+				}
+			},
+		},
+		Letter5Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[48] = { 0, RH = { 51.3333, 0.333333 }, Flags = { Linear = true } },
+				[58] = { 1, LH = { 54.6667, 0.666667 } }
+			}
+		},
+		Letter3Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[44] = { 0, RH = { 47.3333, 0.333333 }, Flags = { Linear = true } },
+				[54] = { 1, LH = { 50.6667, 0.666667 } }
+			}
+		},
+		MediaOut1 = Saver {
+			Inputs = {
+				Index = Input { Value = "0", },
+				Input = Input {
+					SourceOp = "Over",
+					Source = "Output",
+				}
+			},
+		},
+		Letter2Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[42] = { 0, RH = { 45.3333, 0.333333 }, Flags = { Linear = true } },
+				[52] = { 1, LH = { 48.6667, 0.666667 } }
+			}
+		},
+		Wordmark = sTransform {
+			Inputs = {
+				YOffset = Input {
+					SourceOp = "WordmarkYOffset",
+					Source = "Value",
+				},
+				Input = Input {
+					SourceOp = "WordmarkLetters",
+					Source = "Output",
+				}
+			},
+		},
+		Feather5 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.021582, -0.045215 }, },
+				ZRotation = Input {
+					SourceOp = "Feather5ZRotation",
+					Source = "Value",
+				},
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.070044, Y = 0.058716, LX = 0.0170933333333333, LY = -0.000627999999999999, RX = 0.000593999999999997, RY = -0.00103366666666667 },
+							{ Linear = true, X = -0.068262, Y = 0.055615, LX = -0.000593999999999997, LY = 0.00103366666666667, RX = -0.0289876666666667, RY = -0.00520833333333333 },
+							{ Linear = true, X = -0.155225, Y = 0.03999, LX = 0.0289876666666667, LY = 0.00520833333333333, RX = 0.0107423333333333, RY = -0.00952133333333333 },
+							{ Linear = true, X = -0.122998, Y = 0.011426, LX = -0.0107423333333333, LY = 0.00952133333333333, RX = 0.0243, RY = 0.006429 },
+							{ Linear = true, X = -0.050098, Y = 0.030713, LX = -0.0243, LY = -0.006429, RX = 0.000838333333333332, RY = -0.000846333333333333 },
+							{ Linear = true, X = -0.047583, Y = 0.028174, LX = -0.000838333333333332, LY = 0.000846333333333333, RX = 0.012719, RY = 0.003365 },
+							{ Linear = true, X = -0.009426, Y = 0.038269, LX = -0.012719, LY = -0.003365, RX = -0.00311266666666667, RY = 0.00618766666666667 },
+							{ Linear = true, X = -0.018764, Y = 0.056832, LX = 0.00311266666666667, LY = -0.00618766666666667, RX = -0.0170933333333333, RY = 0.000627999999999999 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Feather5Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Letter1Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[40] = { 0, RH = { 43.3333, 0.333333 }, Flags = { Linear = true } },
+				[50] = { 1, LH = { 46.6667, 0.666667 } }
+			}
+		},
+		Letter4 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.038208, -0.205566 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.026831, Y = 0.030859, LX = 0.00410166666666667, LY = 0.000130333333333333, RX = -4.89999999999993e-05, RY = -0.020703 },
+							{ Linear = true, X = -0.026978, Y = -0.03125, LX = 4.89999999999993e-05, LY = 0.020703, RX = 0.00415066666666667, RY = 0 },
+							{ Linear = true, X = -0.014526, Y = -0.03125, LX = -0.00415066666666667, LY = -0, RX = 0, RY = 0.00846366666666667 },
+							{ Linear = true, X = -0.014526, Y = -0.005859, LX = -0, LY = -0.00846366666666667, RX = 0.009684, RY = -8.16666666666668e-05 },
+							{ Linear = true, X = 0.014526, Y = -0.006104, LX = -0.009684, LY = 8.16666666666668e-05, RX = 8.16666666666662e-05, RY = -0.008382 },
+							{ Linear = true, X = 0.014771, Y = -0.03125, LX = -8.16666666666662e-05, LY = 0.008382, RX = 0.004069, RY = 0 },
+							{ Linear = true, X = 0.026978, Y = -0.03125, LX = -0.004069, LY = -0, RX = 0, RY = 0.0208333333333333 },
+							{ Linear = true, X = 0.026978, Y = 0.03125, LX = -0, LY = -0.0208333333333333, RX = -0.004069, RY = 0 },
+							{ Linear = true, X = 0.014771, Y = 0.03125, LX = 0.004069, LY = -0, RX = 0, RY = -0.00844733333333333 },
+							{ Linear = true, X = 0.014771, Y = 0.005908, LX = -0, LY = 0.00844733333333333, RX = -0.00740566666666667, RY = -9.76666666666666e-05 },
+							{ Linear = true, X = -0.007446, Y = 0.005615, LX = 0.00740566666666667, LY = 9.76666666666666e-05, RX = -0.00236, RY = 9.76666666666666e-05 },
+							{ Linear = true, X = -0.014526, Y = 0.005908, LX = 0.00236, LY = -9.76666666666666e-05, RX = 0, RY = 0.00844733333333333 },
+							{ Linear = true, X = -0.014526, Y = 0.03125, LX = -0, LY = -0.00844733333333333, RX = -0.00410166666666667, RY = -0.000130333333333333 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter4Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Feather1ZRotation = BezierSpline {
+			SplineColor = { Red = 128, Green = 128, Blue = 255 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[26] = { 38, RH = { 32, 25.333333 } },
+				[44] = { 0, LH = { 38, 0 } }
+			}
+		},
+		DiamondSize = BezierSpline {
+			SplineColor = { Red = 225, Green = 0, Blue = 225 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[30] = { 0, RH = { 34, 0.393333 } },
+				[42] = { 1.18, LH = { 38, 1.18 }, RH = { 44.6667, 1.18 } },
+				[50] = { 1, LH = { 47.3333, 1 } }
+			}
+		},
+		Letter6 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { 0.159668, -0.205566 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.02002, Y = 0.03125, LX = 0.00406933333333333, LY = -0, RX = 0, RY = -0.0208333333333333 },
+							{ Linear = true, X = -0.02002, Y = -0.03125, LX = -0, LY = 0.0208333333333333, RX = 0.0133466666666667, RY = 0 },
+							{ Linear = true, X = 0.02002, Y = -0.03125, LX = -0.0133466666666667, LY = -0, RX = 0, RY = 0.00398766666666667 },
+							{ Linear = true, X = 0.02002, Y = -0.019287, LX = -0, LY = -0.00398766666666667, RX = -0.00927733333333333, RY = 8.13333333333326e-05 },
+							{ Linear = true, X = -0.007812, Y = -0.019043, LX = 0.00927733333333333, LY = -8.13333333333326e-05, RX = 0, RY = 0.0167643333333333 },
+							{ Linear = true, X = -0.007812, Y = 0.03125, LX = -0, LY = -0.0167643333333333, RX = -0.00406933333333333, RY = 0 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter6Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Feather6ZRotation = BezierSpline {
+			SplineColor = { Red = 128, Green = 128, Blue = 255 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[6] = { 38, RH = { 12, 25.333333 } },
+				[24] = { 0, LH = { 18, 0 } }
+			}
+		},
+		Feather3 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.021582, -0.045215 }, },
+				ZRotation = Input {
+					SourceOp = "Feather3ZRotation",
+					Source = "Value",
+				},
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.1, Y = 0.133838, LX = 0.0180003333333333, LY = -0.00730766666666667, RX = 0.000765000000000002, RY = -0.00162766666666668 },
+							{ Linear = true, X = -0.097705, Y = 0.128955, LX = -0.000765000000000002, LY = 0.00162766666666668, RX = -0.0528483333333333, RY = 0.0162596666666667 },
+							{ Linear = true, X = -0.25625, Y = 0.177734, LX = 0.0528483333333333, LY = -0.0162596666666667, RX = 0.00903333333333333, RY = -0.0154133333333333 },
+							{ Linear = true, X = -0.22915, Y = 0.131494, LX = -0.00903333333333333, LY = 0.0154133333333333, RX = 0.0463866666666667, RY = -0.0109536666666667 },
+							{ Linear = true, X = -0.08999, Y = 0.098633, LX = -0.0463866666666667, LY = 0.0109536666666667, RX = 0.000789333333333332, RY = -0.001522 },
+							{ Linear = true, X = -0.087622, Y = 0.094067, LX = -0.000789333333333332, LY = 0.001522, RX = 0.0189616666666667, RY = -0.00447733333333333 },
+							{ Linear = true, X = -0.030737, Y = 0.080635, LX = -0.0189616666666667, LY = 0.00447733333333333, RX = -0.00458166666666667, RY = 0.009108 },
+							{ Linear = true, X = -0.044482, Y = 0.107959, LX = 0.00458166666666667, LY = -0.009108, RX = -0.000505666666666666, RY = 0.00131866666666667 },
+							{ Linear = true, X = -0.045999, Y = 0.111915, LX = 0.000505666666666666, LY = -0.00131866666666667, RX = -0.0180003333333333, RY = 0.00730766666666667 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Feather3Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Letter8Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[54] = { 0, RH = { 57.3333, 0.333333 }, Flags = { Linear = true } },
+				[64] = { 1, LH = { 60.6667, 0.666667 } }
+			}
+		},
+		Feather1Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[26] = { 0, RH = { 28, 0.333333 }, Flags = { Linear = true } },
+				[32] = { 1, LH = { 30, 0.666667 } }
+			}
+		},
+		Letter2 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.225366, -0.205566 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.003003, Y = 0.03125, LX = 0.00234366666666667, LY = -0, RX = -0.00997733333333333, RY = -0.0208333333333333 },
+							{ Linear = true, X = -0.032935, Y = -0.03125, LX = 0.00997733333333333, LY = 0.0208333333333333, RX = 0.00450866666666667, RY = 0 },
+							{ Linear = true, X = -0.019409, Y = -0.03125, LX = -0.00450866666666667, LY = -0, RX = 0.00664066666666667, RY = 0.013851 },
+							{ Linear = true, X = 0.000513, Y = 0.010303, LX = -0.00664066666666667, LY = -0.013851, RX = 0.00288066666666667, RY = -0.006364 },
+							{ Linear = true, X = 0.009155, Y = -0.008789, LX = -0.00288066666666667, LY = 0.006364, RX = -0.003955, RY = 0 },
+							{ Linear = true, X = -0.00271, Y = -0.008789, LX = 0.003955, LY = -0, RX = -0.00146466666666667, RY = -0.003418 },
+							{ Linear = true, X = -0.007104, Y = -0.019043, LX = 0.00146466666666667, LY = 0.003418, RX = 0.00681933333333333, RY = 0 },
+							{ Linear = true, X = 0.013354, Y = -0.019043, LX = -0.00681933333333333, LY = -0, RX = 0.00190433333333333, RY = -0.00405266666666667 },
+							{ Linear = true, X = 0.019067, Y = -0.031201, LX = -0.00190433333333333, LY = 0.00405266666666667, RX = 0.00462266666666667, RY = -1.63333333333335e-05 },
+							{ Linear = true, X = 0.032935, Y = -0.03125, LX = -0.00462266666666667, LY = 1.63333333333335e-05, RX = -0.00963566666666667, RY = 0.0208333333333333 },
+							{ Linear = true, X = 0.004028, Y = 0.03125, LX = 0.00963566666666667, LY = -0.0208333333333333, RX = -0.00234366666666667, RY = 0 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter2Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		LeftWing = sMerge {
+			Inputs = {
+				Input1 = Input {
+					SourceOp = "Feather1",
+					Source = "Output",
+				},
+				Input2 = Input {
+					SourceOp = "Feather2",
+					Source = "Output",
+				},
+				Input4 = Input {
+					SourceOp = "Feather4",
+					Source = "Output",
+				},
+				Input5 = Input {
+					SourceOp = "Feather5",
+					Source = "Output",
+				},
+				Input3 = Input {
+					SourceOp = "Feather3",
+					Source = "Output",
+				},
+				Input6 = Input {
+					SourceOp = "Feather6",
+					Source = "Output",
+				}
+			},
+		},
+		Feather5ZRotation = BezierSpline {
+			SplineColor = { Red = 128, Green = 128, Blue = 255 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[10] = { 38, RH = { 16, 25.333333 } },
+				[28] = { 0, LH = { 22, 0 } }
+			}
+		},
+		Feather1 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.021582, -0.045215 }, },
+				ZRotation = Input {
+					SourceOp = "Feather1ZRotation",
+					Source = "Value",
+				},
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.33291, Y = 0.362402, LX = 0.076953, LY = -0.046289, RX = 0.00833333333333332, RY = -0.0228353333333333 },
+							{ Linear = true, X = -0.30791, Y = 0.293896, LX = -0.00833333333333332, LY = 0.0228353333333333, RX = 0.0645996666666667, RY = -0.035742 },
+							{ Linear = true, X = -0.114111, Y = 0.18667, LX = -0.0645996666666667, LY = 0.035742, RX = 0.001237, RY = -0.00234366666666667 },
+							{ Linear = true, X = -0.1104, Y = 0.179639, LX = -0.001237, LY = 0.00234366666666667, RX = 0.0162626666666667, RY = -0.008998 },
+							{ Linear = true, X = -0.061612, Y = 0.152645, LX = -0.0162626666666667, LY = 0.008998, RX = -0.00514633333333333, RY = 0.013425 },
+							{ Linear = true, X = -0.077051, Y = 0.19292, LX = 0.00514633333333333, LY = -0.013425, RX = -0.00309233333333334, RY = 0.005306 },
+							{ Linear = true, X = -0.086328, Y = 0.208838, LX = 0.00309233333333334, LY = -0.005306, RX = -0.005241, RY = 0.004899 },
+							{ Linear = true, X = -0.102051, Y = 0.223535, LX = 0.005241, LY = -0.004899, RX = -0.076953, RY = 0.046289 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Feather1Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Letter8 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { 0.331763, -0.205566 }, },
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.003003, Y = 0.03125, LX = 0.00234366666666667, LY = -0, RX = -0.00997733333333333, RY = -0.0208333333333333 },
+							{ Linear = true, X = -0.032935, Y = -0.03125, LX = 0.00997733333333333, LY = 0.0208333333333333, RX = 0.00450866666666667, RY = 0 },
+							{ Linear = true, X = -0.019409, Y = -0.03125, LX = -0.00450866666666667, LY = -0, RX = 0.00664066666666667, RY = 0.013851 },
+							{ Linear = true, X = 0.000513, Y = 0.010303, LX = -0.00664066666666667, LY = -0.013851, RX = 0.00288066666666667, RY = -0.006364 },
+							{ Linear = true, X = 0.009155, Y = -0.008789, LX = -0.00288066666666667, LY = 0.006364, RX = -0.003955, RY = 0 },
+							{ Linear = true, X = -0.00271, Y = -0.008789, LX = 0.003955, LY = -0, RX = -0.00146466666666667, RY = -0.003418 },
+							{ Linear = true, X = -0.007104, Y = -0.019043, LX = 0.00146466666666667, LY = 0.003418, RX = 0.00681933333333333, RY = 0 },
+							{ Linear = true, X = 0.013354, Y = -0.019043, LX = -0.00681933333333333, LY = -0, RX = 0.00190433333333333, RY = -0.00405266666666667 },
+							{ Linear = true, X = 0.019067, Y = -0.031201, LX = -0.00190433333333333, LY = 0.00405266666666667, RX = 0.00462266666666667, RY = -1.63333333333335e-05 },
+							{ Linear = true, X = 0.032935, Y = -0.03125, LX = -0.00462266666666667, LY = 1.63333333333335e-05, RX = -0.00963566666666667, RY = 0.0208333333333333 },
+							{ Linear = true, X = 0.004028, Y = 0.03125, LX = 0.00963566666666667, LY = -0.0208333333333333, RX = -0.00234366666666667, RY = 0 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Letter8Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		WordmarkLetters = sMerge {
+			Inputs = {
+				Input1 = Input {
+					SourceOp = "Letter1",
+					Source = "Output",
+				},
+				Input2 = Input {
+					SourceOp = "Letter2",
+					Source = "Output",
+				},
+				Input4 = Input {
+					SourceOp = "Letter4",
+					Source = "Output",
+				},
+				Input6 = Input {
+					SourceOp = "Letter6",
+					Source = "Output",
+				},
+				Input5 = Input {
+					SourceOp = "Letter5",
+					Source = "Output",
+				},
+				Input3 = Input {
+					SourceOp = "Letter3",
+					Source = "Output",
+				},
+				Input7 = Input {
+					SourceOp = "Letter7",
+					Source = "Output",
+				},
+				Input8 = Input {
+					SourceOp = "Letter8",
+					Source = "Output",
+				}
+			},
+		},
+		Over = Merge {
+			Inputs = {
+				Background = Input {
+					SourceOp = "Ash",
+					Source = "Output",
+				},
+				Foreground = Input {
+					SourceOp = "Render",
+					Source = "Output",
+				}
+			},
+		},
+		Feather3ZRotation = BezierSpline {
+			SplineColor = { Red = 128, Green = 128, Blue = 255 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[18] = { 38, RH = { 24, 25.333333 } },
+				[36] = { 0, LH = { 30, 0 } }
+			}
+		},
+		Feather4Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[14] = { 0, RH = { 16, 0.333333 }, Flags = { Linear = true } },
+				[20] = { 1, LH = { 18, 0.666667 } }
+			}
+		},
+		Ash = Background {
+			Inputs = {
+				GlobalOut = Input { Value = 149, },
+				Width = Input { Value = 1024, },
+				Height = Input { Value = 1024, },
+				TopLeftRed = Input { Value = 0.0784, },
+				TopLeftGreen = Input { Value = 0.0784, },
+				TopLeftBlue = Input { Value = 0.0784, }
+			},
+		},
+		Feather6 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.021582, -0.045215 }, },
+				ZRotation = Input {
+					SourceOp = "Feather6ZRotation",
+					Source = "Value",
+				},
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.047583, Y = 0.028174, LX = 0.012719, LY = 0.003365, RX = 0.000838333333333334, RY = -0.000846333333333333 },
+							{ Linear = true, X = -0.045068, Y = 0.025635, LX = -0.000838333333333334, LY = 0.000846333333333333, RX = -0.0155436666666667, RY = -0.0125976666666667 },
+							{ Linear = true, X = -0.091699, Y = -0.012158, LX = 0.0155436666666667, LY = 0.0125976666666667, RX = 0.0192706666666667, RY = -0.010954 },
+							{ Linear = true, X = -0.033887, Y = -0.04502, LX = -0.0192706666666667, LY = 0.010954, RX = 0.0112956666666667, RY = 0.021517 },
+							{ Linear = true, X = 0, Y = 0.019531, LX = -0.0112956666666667, LY = -0.021517, RX = -0.003142, RY = 0.006246 },
+							{ Linear = true, X = -0.009426, Y = 0.038269, LX = 0.003142, LY = -0.006246, RX = -0.012719, RY = -0.003365 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Feather6Opacity",
+					Source = "Value",
+				}
+			},
+		},
+		Logo = sMerge {
+			Inputs = {
+				Input1 = Input {
+					SourceOp = "LeftWing",
+					Source = "Output",
+				},
+				Input2 = Input {
+					SourceOp = "RightWing",
+					Source = "Output",
+				},
+				Input4 = Input {
+					SourceOp = "Wordmark",
+					Source = "Output",
+				},
+				Input3 = Input {
+					SourceOp = "Diamond",
+					Source = "Output",
+				}
+			},
+		},
+		Feather4ZRotation = BezierSpline {
+			SplineColor = { Red = 128, Green = 128, Blue = 255 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[14] = { 38, RH = { 20, 25.333333 } },
+				[32] = { 0, LH = { 26, 0 } }
+			}
+		},
+		Feather2Opacity = BezierSpline {
+			SplineColor = { Red = 179, Green = 28, Blue = 244 },
+			CtrlWZoom = false,
+			KeyFrames = {
+				[22] = { 0, RH = { 24, 0.333333 }, Flags = { Linear = true } },
+				[28] = { 1, LH = { 26, 0.666667 } }
+			}
+		},
+		Diamond = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -9.8e-05, 0.09375 }, },
+				Size = Input {
+					SourceOp = "DiamondSize",
+					Source = "Value",
+				},
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = 0.000391, Y = 0.085449, LX = 0.0148763333333333, LY = -0.0284666666666667, RX = -0.015137, RY = -0.028369 },
+							{ Linear = true, X = -0.04502, Y = 0.000342, LX = 0.015137, LY = 0.028369, RX = 0.0151206666666667, RY = -0.028597 },
+							{ Linear = true, X = 0.000342, Y = -0.085449, LX = -0.0151206666666667, LY = 0.028597, RX = 0.0148926666666667, RY = 0.0284993333333333 },
+							{ Linear = true, X = 0.04502, Y = 4.9e-05, LX = -0.0148926666666667, LY = -0.0284993333333333, RX = -0.0148763333333333, RY = 0.0284666666666667 }
+						}
+					},
+				},
+				Red = Input { Value = 0.8941, },
+				Green = Input { Value = 0.3412, },
+				Blue = Input { Value = 0.1804, }
+			},
+		},
+		Feather4 = sPolygon {
+			DrawMode = "ClickAppend",
+			Inputs = {
+				Center = Input { Value = { -0.021582, -0.045215 }, },
+				ZRotation = Input {
+					SourceOp = "Feather4ZRotation",
+					Source = "Value",
+				},
+				Polyline = Input {
+					Value = Polyline {
+						Closed = true,
+						Points = {
+							{ Linear = true, X = -0.087622, Y = 0.094067, LX = 0.0189616666666667, LY = -0.00447733333333333, RX = 0.000789333333333336, RY = -0.00152166666666667 },
+							{ Linear = true, X = -0.085254, Y = 0.089502, LX = -0.000789333333333336, LY = 0.00152166666666667, RX = -0.0414063333333333, RY = 0.004313 },
+							{ Linear = true, X = -0.209473, Y = 0.102441, LX = 0.0414063333333333, LY = -0.004313, RX = 0.009554, RY = -0.012207 },
+							{ Linear = true, X = -0.180811, Y = 0.06582, LX = -0.009554, LY = 0.012207, RX = 0.0363283333333333, RY = -0.00133466666666667 },
+							{ Linear = true, X = -0.071826, Y = 0.061816, LX = -0.0363283333333333, LY = 0.00133466666666667, RX = 0.000594000000000002, RY = -0.00103333333333334 },
+							{ Linear = true, X = -0.070044, Y = 0.058716, LX = -0.000594000000000002, LY = 0.00103333333333334, RX = 0.0170933333333333, RY = -0.000627999999999999 },
+							{ Linear = true, X = -0.018764, Y = 0.056832, LX = -0.0170933333333333, LY = 0.000627999999999999, RX = -0.003991, RY = 0.00793433333333333 },
+							{ Linear = true, X = -0.030737, Y = 0.080635, LX = 0.003991, LY = -0.00793433333333333, RX = -0.0189616666666667, RY = 0.00447733333333333 }
+						}
+					},
+				},
+				Red = Input { Value = 0.9255, },
+				Green = Input { Value = 0.902, },
+				Blue = Input { Value = 0.8549, },
+				Opacity = Input {
+					SourceOp = "Feather4Opacity",
+					Source = "Value",
+				}
+			},
+		}
+	},
+	Frames = {
+	},
+	Prefs = {
+		Comp = {
+			Interactive = {
+				Proxy = {
+					Scale = 1,
+				},
+			},
+			Paths = {
+				Map = {
+					["ResolveCaches:"] = "/path/to/CacheClip/Fusion",
+				},
+			},
+			FrameFormat = {
+				Width = 1024,
+				Height = 1024,
+				DepthFull = 3,
+				DepthPreview = 3,
+				DepthInteractive = 3,
+			},
+			Unsorted = {
+				GlobalEnd = 149
+			},
+		}
+	},
+}
