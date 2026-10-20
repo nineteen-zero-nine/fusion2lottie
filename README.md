@@ -1,5 +1,7 @@
 # fusion2lottie
 
+[![CI](https://github.com/nineteen-zero-nine/fusion2lottie/actions/workflows/ci.yml/badge.svg)](https://github.com/nineteen-zero-nine/fusion2lottie/actions/workflows/ci.yml)
+
 Convert motion design made in **DaVinci Resolve's Fusion page** to **Lottie**, so it plays on the web and in apps (`lottie-web`, `lottie-react`, iOS, Android) the way After Effects animations do through Bodymovin.
 
 ```sh

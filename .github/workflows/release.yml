@@ -1,0 +1,21 @@
+name: Release
+
+# Publishing a GitHub release whose tag is v<version> builds the package and uploads it to PyPI.
+# PyPI trusts this workflow (trusted publishing): no token is stored anywhere.
+on:
+  release:
+    types: [published]
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - name: The tag matches the package's version
+        run: test "${GITHUB_REF_NAME#v}" = "$(uv version --short)"
+      - run: uv build
+      - run: uv publish
